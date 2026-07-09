@@ -1,0 +1,2267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Chatchamon Chen · Cancer Medical Record</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f5f1e8; --bg-card: #ffffff; --bg-surface: #faf8f4; --bg-hover: #f0ebe0;
+  --gold: #b8963e; --gold-deep: #8b7332; --gold-light: #d4b876;
+  --gold-pale: rgba(184, 150, 62, 0.08); --gold-border: rgba(184, 150, 62, 0.25);
+  --burgundy: #7a2e3a; --burgundy-pale: rgba(122, 46, 58, 0.08); --burgundy-border: rgba(122, 46, 58, 0.25);
+  --teal: #2d5f5d; --teal-pale: rgba(45, 95, 93, 0.08); --teal-border: rgba(45, 95, 93, 0.25);
+  --amber: #c47a2a; --amber-pale: rgba(196, 122, 42, 0.1); --amber-border: rgba(196, 122, 42, 0.35);
+  --text: #1a1a1a; --text-secondary: #4a4540; --text-tertiary: #7a7268; --text-quaternary: #a89f94;
+  --border: rgba(26, 26, 26, 0.08); --border-strong: rgba(26, 26, 26, 0.15);
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.06); --shadow-md: 0 4px 12px rgba(0,0,0,0.06);
+  --shadow-lg: 0 10px 30px rgba(0,0,0,0.08); --shadow-gold: 0 10px 30px rgba(184, 150, 62, 0.2);
+  --radius: 16px; --radius-lg: 24px; --radius-xl: 32px;
+  --font-sans: 'Inter', -apple-system, sans-serif; --font-thai: 'IBM Plex Sans Thai', sans-serif; --font-mono: 'JetBrains Mono', monospace;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; scroll-padding-top: 80px; }
+body { font-family: var(--font-sans); font-size: 16px; line-height: 1.6; color: var(--text); background: var(--bg); -webkit-font-smoothing: antialiased; }
+body.lang-th { font-family: var(--font-thai); }
+body.lang-th .en { display: none !important; }
+body.lang-en .th { display: none !important; }
+
+/* Nav */
+.sticky-nav { position: sticky; top: 0; z-index: 100; background: rgba(245, 241, 232, 0.9); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); padding: 10px 0; }
+.nav-container { max-width: 1200px; margin: 0 auto; padding: 0 20px; display: flex; align-items: center; gap: 12px; }
+.nav-brand { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 14px; flex-shrink: 0; }
+.nav-brand-mark { width: 28px; height: 28px; border-radius: 50%; background: linear-gradient(135deg, var(--gold-light), var(--gold-deep)); display: flex; align-items: center; justify-content: center; font-size: 12px; color: white; }
+.nav-tabs { display: flex; gap: 4px; overflow-x: auto; scrollbar-width: none; flex: 1; padding: 4px; }
+.nav-tabs::-webkit-scrollbar { display: none; }
+.nav-tab { padding: 6px 12px; border-radius: 100px; font-size: 13px; font-weight: 500; color: var(--text-tertiary); cursor: pointer; white-space: nowrap; border: none; background: transparent; font-family: inherit; }
+.nav-tab.active { background: var(--text); color: white; font-weight: 600; }
+.lang-toggle { display: flex; background: rgba(0,0,0,0.04); border-radius: 100px; padding: 2px; }
+.lang-btn { padding: 4px 10px; border: none; background: transparent; color: var(--text-tertiary); font-size: 11px; font-weight: 600; cursor: pointer; border-radius: 100px; }
+.lang-btn.active { background: white; color: var(--text); box-shadow: var(--shadow-sm); }
+
+.container { max-width: 1200px; margin: 0 auto; padding: 24px 20px; overflow-x: hidden; }
+
+/* Hero */
+.hero { background: var(--bg-card); border-radius: var(--radius-xl); padding: 32px; margin-bottom: 28px; box-shadow: var(--shadow-md); border: 1px solid var(--border); position: relative; overflow: hidden; }
+.hero::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, var(--gold), var(--burgundy), var(--teal), var(--amber)); }
+.hero-top { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 20px; margin-bottom: 28px; }
+.patient-identity { display: flex; gap: 20px; align-items: center; }
+.avatar { width: 96px; height: 96px; border-radius: 50%; overflow: hidden; flex-shrink: 0; border: 3px solid white; box-shadow: var(--shadow-lg); background: linear-gradient(135deg, var(--gold-light), var(--gold-deep)); display: flex; align-items: center; justify-content: center; font-size: 32px; color: white; font-weight: 700; }
+.avatar img { width: 100%; height: 100%; object-fit: cover; }
+.patient-name h1 { font-size: 36px; font-weight: 800; letter-spacing: -1px; line-height: 1.1; margin-bottom: 6px; }
+.patient-name .sub { color: var(--text-tertiary); font-size: 14px; }
+.hero-meta { display: flex; gap: 8px; flex-wrap: wrap; }
+.meta-chip { background: var(--bg-surface); border: 1px solid var(--border); padding: 8px 14px; border-radius: 100px; font-size: 12px; display: flex; align-items: center; gap: 8px; }
+.meta-chip .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--amber); animation: pulse-dot 2s infinite; }
+@keyframes pulse-dot { 0%, 100% { box-shadow: 0 0 0 0 rgba(196, 122, 42, 0.4); } 50% { box-shadow: 0 0 0 6px rgba(196, 122, 42, 0); } }
+.meta-chip .label { color: var(--text-tertiary); font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; }
+.meta-chip .value { font-weight: 600; color: var(--text); font-size: 13px; }
+
+.quick-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; }
+.stat-card { background: var(--bg-surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 20px; transition: all 0.3s ease; position: relative; overflow: hidden; }
+.stat-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--gold); opacity: 0; transition: opacity 0.3s; }
+.stat-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); border-color: var(--gold-border); }
+.stat-card:hover::before { opacity: 1; }
+.stat-card .stat-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.8px; color: var(--text-tertiary); margin-bottom: 8px; font-weight: 600; }
+.stat-card .stat-value { font-size: 32px; font-weight: 800; line-height: 1; margin-bottom: 6px; letter-spacing: -1px; }
+.stat-card .stat-sub { font-size: 13px; color: var(--text-secondary); line-height: 1.4; }
+.stat-card.stage .stat-value { color: var(--burgundy); }
+.stat-card.cycles .stat-value { color: var(--teal); }
+.stat-card.weight .stat-value { color: var(--amber); }
+.stat-card.infusing { border-color: var(--amber-border); background: var(--amber-pale); animation: infusing-pulse 3s infinite; }
+.stat-card.infusing .stat-value { color: var(--amber); }
+@keyframes infusing-pulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(196, 122, 42, 0.1); } 50% { box-shadow: 0 0 0 8px rgba(196, 122, 42, 0); } }
+
+.section { margin-bottom: 40px; }
+.section-header { display: flex; align-items: baseline; gap: 12px; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+.section-header h2 { font-size: 28px; font-weight: 800; letter-spacing: -0.5px; line-height: 1.2; }
+.section-header .section-sub { font-size: 14px; color: var(--text-tertiary); margin-top: 4px; }
+
+.card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 28px; margin-bottom: 16px; box-shadow: var(--shadow-sm); transition: all 0.3s ease; overflow: hidden; max-width: 100%; }
+.card:hover { box-shadow: var(--shadow-md); border-color: var(--border-strong); }
+.card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; gap: 12px; flex-wrap: wrap; }
+.card-title { font-size: 20px; font-weight: 700; letter-spacing: -0.3px; display: flex; align-items: center; gap: 10px; line-height: 1.3; }
+.card-title .icon { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; background: var(--gold-pale); border: 1px solid var(--gold-border); font-size: 16px; flex-shrink: 0; }
+.card-subtitle { font-size: 13px; color: var(--text-tertiary); margin-top: 4px; }
+
+.grid { display: grid; gap: 16px; max-width: 100%; }
+.grid-2 { grid-template-columns: repeat(2, 1fr); }
+@media (max-width: 900px) { .grid-2 { grid-template-columns: 1fr; } }
+
+/* 3D Colon Viewer */
+.colon-3d-mobile-header { display: none; background: var(--bg-card); border: 1px solid var(--border); border-bottom: none; border-radius: var(--radius-lg) var(--radius-lg) 0 0; padding: 16px 20px; margin-top: 4px; }
+.colon-3d-mobile-header h3 { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+.colon-3d-mobile-header p { font-size: 12px; color: var(--text-secondary); }
+.colon-3d-container { position: relative; width: 100%; height: 550px; background: linear-gradient(135deg, #1a1f3a 0%, #0f1428 100%); border-radius: var(--radius-lg); overflow: hidden; margin-bottom: 20px; box-shadow: var(--shadow-lg); border: 1px solid rgba(184, 150, 62, 0.2); }
+.colon-3d-container canvas { display: block; width: 100%; height: 100%; }
+.colon-3d-overlay { position: absolute; top: 16px; left: 16px; right: 16px; display: flex; justify-content: space-between; pointer-events: none; z-index: 10; }
+.colon-3d-title { background: rgba(0,0,0,0.6); backdrop-filter: blur(10px); padding: 10px 14px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1); color: white; pointer-events: auto; }
+.colon-3d-title h3 { font-size: 14px; font-weight: 700; margin-bottom: 2px; }
+.colon-3d-title p { font-size: 11px; color: rgba(255,255,255,0.7); }
+.colon-3d-controls { display: flex; gap: 6px; pointer-events: auto; }
+.colon-3d-btn { width: 36px; height: 36px; border-radius: 50%; background: rgba(0,0,0,0.6); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.15); color: white; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+.colon-3d-btn:hover { background: rgba(184, 150, 62, 0.4); transform: scale(1.1); }
+.colon-3d-legend { position: absolute; bottom: 16px; left: 16px; background: rgba(0,0,0,0.6); backdrop-filter: blur(10px); padding: 12px 16px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1); color: white; font-size: 11px; pointer-events: auto; z-index: 10; }
+.legend-row { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
+.legend-row:last-child { margin-bottom: 0; }
+.legend-dot { width: 10px; height: 10px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.3); flex-shrink: 0; }
+.colon-3d-hint { position: absolute; bottom: 16px; right: 16px; background: rgba(0,0,0,0.6); padding: 8px 12px; border-radius: 8px; color: rgba(255,255,255,0.8); font-size: 10px; pointer-events: none; z-index: 10; }
+.colon-3d-mobile-legend { display: none; background: var(--bg-card); border: 1px solid var(--border); border-top: none; border-radius: 0 0 var(--radius-lg) var(--radius-lg); padding: 16px 20px; margin-bottom: 16px; }
+.mobile-legend-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.mobile-legend-item { display: flex; align-items: center; gap: 8px; color: var(--text-secondary); font-size: 12px; }
+.mobile-legend-dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
+.marker-tooltip { position: absolute; background: rgba(15,20,40,0.95); border: 1px solid rgba(255,255,255,0.2); border-radius: 10px; padding: 12px 16px; color: white; pointer-events: none; opacity: 0; transition: opacity 0.2s; z-index: 100; max-width: 260px; font-size: 12px; }
+.marker-tooltip.visible { opacity: 1; }
+.marker-tooltip .tt-title { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+.marker-tooltip .tt-content { color: rgba(255,255,255,0.8); line-height: 1.4; }
+.marker-tooltip .tt-status { display: inline-block; padding: 2px 6px; border-radius: 4px; font-size: 9px; font-weight: 700; margin-top: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
+
+.detail-panel { position: fixed; right: -400px; top: 0; width: 380px; max-width: 90vw; height: 100vh; background: var(--bg-card); border-left: 1px solid var(--border); padding: 28px 24px; overflow-y: auto; transition: right 0.4s cubic-bezier(0.4,0,0.2,1); z-index: 1001; box-shadow: -10px 0 30px rgba(0,0,0,0.1); }
+.detail-panel.open { right: 0; }
+.detail-panel .close-btn { position: absolute; top: 16px; right: 16px; background: var(--bg-surface); border: 1px solid var(--border); color: var(--text); width: 32px; height: 32px; border-radius: 50%; cursor: pointer; font-size: 16px; z-index: 10; }
+.detail-panel h2 { font-size: 22px; font-weight: 700; margin-bottom: 16px; padding-right: 40px; }
+.detail-section { margin-bottom: 16px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
+.detail-section:last-child { border-bottom: none; }
+.detail-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.8px; color: var(--text-tertiary); margin-bottom: 4px; font-weight: 600; }
+.detail-value { font-size: 14px; color: var(--text); line-height: 1.5; font-weight: 500; }
+
+.tnm-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 20px; }
+.tnm-box { background: var(--bg-surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px 16px; text-align: center; transition: all 0.3s; cursor: pointer; position: relative; overflow: hidden; }
+.tnm-box::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--gold); transform: scaleX(0); transition: transform 0.3s; }
+.tnm-box:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); border-color: var(--gold-border); }
+.tnm-box:hover::before { transform: scaleX(1); }
+.tnm-letter { font-size: 48px; font-weight: 800; line-height: 1; margin-bottom: 6px; color: var(--gold-deep); letter-spacing: -2px; }
+.tnm-value { font-size: 14px; font-weight: 600; margin-bottom: 6px; }
+.tnm-desc { font-size: 12px; color: var(--text-secondary); line-height: 1.4; }
+.stage-pill { display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; background: var(--burgundy-pale); border: 1px solid var(--burgundy-border); border-radius: 100px; font-weight: 700; color: var(--burgundy); font-size: 14px; }
+
+.cycle-tracker { display: flex; gap: 6px; margin-bottom: 20px; flex-wrap: wrap; }
+.cycle-dot { flex: 1; min-width: 40px; height: 56px; border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 11px; font-weight: 600; transition: all 0.3s; border: 1px solid var(--border); background: var(--bg-surface); cursor: pointer; }
+.cycle-dot:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+.cycle-dot.completed { background: var(--teal-pale); border-color: var(--teal-border); color: var(--teal); }
+.cycle-dot.current { background: var(--amber-pale); border-color: var(--amber-border); color: var(--amber); animation: pulse-amber 2s infinite; }
+.cycle-dot.upcoming { color: var(--text-quaternary); }
+@keyframes pulse-amber { 0%, 100% { box-shadow: 0 0 0 0 rgba(196, 122, 42, 0.3); } 50% { box-shadow: 0 0 0 8px rgba(196, 122, 42, 0); } }
+.cycle-dot .num { font-size: 20px; font-weight: 700; letter-spacing: -0.5px; }
+.cycle-dot .label { font-size: 9px; text-transform: uppercase; letter-spacing: 0.5px; opacity: 0.8; font-weight: 600; }
+.progress-bar { height: 6px; background: var(--bg-surface); border-radius: 100px; overflow: hidden; margin-bottom: 16px; border: 1px solid var(--border); }
+.progress-fill { height: 100%; background: linear-gradient(90deg, var(--teal), var(--gold), var(--amber)); border-radius: 100px; transition: width 1s; box-shadow: 0 0 10px rgba(184, 150, 62, 0.4); }
+
+.weight-chart-container { position: relative; height: 240px; margin: 20px 0; padding: 16px 0; }
+.weight-chart-svg { width: 100%; height: 100%; overflow: visible; }
+.chart-grid-line { stroke: var(--border); stroke-width: 1; stroke-dasharray: 4, 4; }
+.chart-line { fill: none; stroke: url(#lineGradient); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; filter: drop-shadow(0 2px 4px rgba(184, 150, 62, 0.3)); }
+.chart-area { fill: url(#areaGradient); }
+.chart-point { cursor: pointer; }
+.chart-point circle { transition: all 0.2s; }
+.chart-point:hover circle { r: 9; stroke-width: 3; }
+.chart-point:hover .point-glow { opacity: 1; }
+.point-glow { opacity: 0; transition: opacity 0.2s; }
+.chart-tooltip { position: absolute; background: white; border: 1px solid var(--border-strong); border-radius: 10px; padding: 10px 14px; font-size: 12px; pointer-events: none; opacity: 0; transition: opacity 0.2s; box-shadow: var(--shadow-lg); z-index: 10; min-width: 120px; }
+.chart-tooltip.visible { opacity: 1; }
+.chart-tooltip .tt-date { font-size: 10px; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; margin-bottom: 2px; }
+.chart-tooltip .tt-value { font-size: 20px; font-weight: 700; letter-spacing: -0.5px; line-height: 1; }
+.chart-tooltip .tt-label { font-size: 11px; color: var(--text-secondary); margin-top: 2px; }
+.chart-x-labels { display: flex; justify-content: space-between; margin-top: 10px; padding: 0 10px; }
+.chart-x-label { font-size: 11px; color: var(--text-tertiary); text-align: center; font-weight: 500; }
+.chart-x-label .label-sub { font-size: 10px; color: var(--text-quaternary); margin-top: 2px; }
+
+.lymph-viz { display: flex; flex-wrap: wrap; gap: 5px; margin: 20px 0; padding: 16px; background: var(--bg-surface); border-radius: var(--radius); border: 1px solid var(--border); }
+.lymph-node { width: 14px; height: 14px; border-radius: 50%; transition: all 0.2s; cursor: pointer; }
+.lymph-node.positive { background: var(--burgundy); box-shadow: 0 0 0 2px rgba(122, 46, 58, 0.2); }
+.lymph-node.negative { background: var(--teal); opacity: 0.4; border: 1px solid var(--teal); }
+.lymph-node:hover { transform: scale(1.6); z-index: 10; }
+.lymph-node.positive:hover { box-shadow: 0 0 0 4px rgba(122, 46, 58, 0.3); }
+.lymph-node.negative:hover { opacity: 1; }
+.lymph-stats { display: flex; justify-content: space-around; margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--border); }
+.lymph-stat { text-align: center; }
+.lymph-stat-num { font-size: 36px; font-weight: 800; line-height: 1; letter-spacing: -1px; }
+.lymph-stat-label { font-size: 11px; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.8px; margin-top: 6px; font-weight: 600; }
+
+.alert { padding: 16px 20px; border-radius: var(--radius); margin-bottom: 12px; display: flex; gap: 14px; align-items: flex-start; border: 1px solid; transition: all 0.2s; position: relative; }
+.alert:hover { transform: translateX(2px); }
+.alert::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; border-radius: 3px 0 0 3px; }
+.alert-icon { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 14px; }
+.alert-content { flex: 1; min-width: 0; }
+.alert-title { font-size: 15px; font-weight: 700; margin-bottom: 4px; letter-spacing: -0.2px; line-height: 1.3; }
+.alert-desc { font-size: 14px; line-height: 1.5; color: var(--text-secondary); word-wrap: break-word; overflow-wrap: break-word; }
+.alert.warning { background: rgba(160, 96, 48, 0.06); border-color: rgba(160, 96, 48, 0.2); }
+.alert.warning .alert-icon { background: rgba(160, 96, 48, 0.15); }
+.alert.danger { background: var(--burgundy-pale); border-color: var(--burgundy-border); }
+.alert.danger .alert-icon { background: rgba(122, 46, 58, 0.15); }
+.alert.info { background: var(--teal-pale); border-color: var(--teal-border); }
+.alert.info .alert-icon { background: rgba(45, 95, 93, 0.15); }
+.alert.success { background: var(--gold-pale); border-color: var(--gold-border); }
+.alert.success .alert-icon { background: rgba(184, 150, 62, 0.15); }
+.alert.infusing { background: var(--amber-pale); border-color: var(--amber-border); animation: infusing-glow 3s infinite; }
+.alert.infusing .alert-icon { background: rgba(196, 122, 42, 0.2); }
+@keyframes infusing-glow { 0%, 100% { box-shadow: 0 0 0 0 rgba(196, 122, 42, 0.15); } 50% { box-shadow: 0 0 0 8px rgba(196, 122, 42, 0); } }
+
+.drug-card { background: var(--gold-pale); border: 1px solid var(--gold-border); border-radius: var(--radius-lg); padding: 24px; margin-bottom: 14px; transition: all 0.3s; overflow: hidden; }
+.drug-card:hover { box-shadow: var(--shadow-gold); transform: translateY(-2px); }
+.drug-card.high-alert { background: var(--burgundy-pale); border-color: var(--burgundy-border); }
+.drug-card.infusing { background: var(--amber-pale); border-color: var(--amber-border); box-shadow: var(--shadow-gold); }
+.drug-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; padding-bottom: 14px; border-bottom: 1px dashed var(--border); flex-wrap: wrap; gap: 10px; }
+.drug-card.high-alert .drug-header { border-bottom-color: var(--burgundy-border); }
+.drug-card.infusing .drug-header { border-bottom-color: var(--amber-border); }
+.drug-name { font-size: 22px; font-weight: 700; letter-spacing: -0.5px; }
+.drug-card.high-alert .drug-name { color: var(--burgundy); }
+.drug-card.infusing .drug-name { color: var(--amber); }
+.drug-dose { font-family: var(--font-mono); font-size: 13px; color: var(--text-secondary); font-weight: 500; }
+.drug-details { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 14px; }
+.drug-detail-item { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.drug-detail-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.8px; color: var(--text-tertiary); font-weight: 600; }
+.drug-detail-value { font-size: 14px; font-weight: 600; font-family: var(--font-mono); word-break: break-word; }
+.drug-card.high-alert .drug-detail-value { color: var(--burgundy); }
+.drug-card.infusing .drug-detail-value { color: var(--amber); }
+
+.regimen-compare { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.regimen-card { background: var(--bg-surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 24px; position: relative; transition: all 0.3s; overflow: hidden; }
+.regimen-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+.regimen-card.active { background: var(--teal-pale); border-color: var(--teal-border); }
+.regimen-card.stopped { opacity: 0.7; }
+.regimen-badge { position: absolute; top: 14px; right: 14px; font-size: 10px; padding: 4px 10px; border-radius: 100px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+.regimen-card.active .regimen-badge { background: var(--teal); color: white; }
+.regimen-card.stopped .regimen-badge { background: var(--burgundy); color: white; }
+.regimen-name { font-size: 26px; font-weight: 800; margin-bottom: 4px; letter-spacing: -0.8px; }
+.regimen-sub { font-size: 13px; color: var(--text-tertiary); margin-bottom: 16px; }
+.regimen-drugs { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px; }
+.drug-tag { font-size: 11px; padding: 5px 10px; border-radius: 100px; background: white; border: 1px solid var(--border); font-family: var(--font-mono); font-weight: 500; }
+.regimen-info { font-size: 13px; color: var(--text-secondary); line-height: 1.6; }
+.regimen-info strong { color: var(--text); font-weight: 600; }
+
+.infusion-sequence { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; padding: 20px; background: var(--bg-surface); border-radius: var(--radius-lg); border: 1px solid var(--border); margin-bottom: 20px; overflow-x: auto; }
+.seq-step { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 14px 16px; border-radius: 14px; background: white; border: 1px solid var(--border); min-width: 80px; transition: all 0.3s; cursor: pointer; }
+.seq-step:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+.seq-step.completed { background: var(--teal-pale); border-color: var(--teal-border); }
+.seq-step.active { background: var(--amber-pale); border-color: var(--amber-border); box-shadow: 0 0 0 4px rgba(196, 122, 42, 0.15); animation: seq-pulse 2s infinite; }
+@keyframes seq-pulse { 0%, 100% { box-shadow: 0 0 0 4px rgba(196, 122, 42, 0.15); } 50% { box-shadow: 0 0 0 8px rgba(196, 122, 42, 0); } }
+.seq-step .seq-num { font-size: 20px; font-weight: 700; color: var(--text-quaternary); letter-spacing: -0.5px; }
+.seq-step.completed .seq-num { color: var(--teal); }
+.seq-step.active .seq-num { color: var(--amber); }
+.seq-step .seq-name { font-size: 11px; font-weight: 600; text-align: center; line-height: 1.3; }
+.seq-arrow { color: var(--text-quaternary); font-size: 18px; font-weight: 300; }
+
+/* Timeline */
+.timeline { display: flex; flex-direction: column; gap: 12px; position: relative; }
+.timeline-item { display: grid; grid-template-columns: 120px 1fr; gap: 20px; padding: 20px 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); transition: all 0.25s ease; align-items: start; position: relative; }
+.timeline-item:hover { transform: translateX(4px); box-shadow: var(--shadow-md); border-color: var(--border-strong); }
+.timeline-date-cell { display: flex; flex-direction: column; gap: 2px; padding-top: 2px; }
+.timeline-date-main { font-family: var(--font-mono); font-size: 13px; font-weight: 600; color: var(--text); letter-spacing: -0.2px; }
+.timeline-date-sub { font-size: 11px; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.5px; }
+.timeline-content-cell { min-width: 0; }
+.timeline-title { font-size: 16px; font-weight: 700; margin-bottom: 6px; letter-spacing: -0.2px; line-height: 1.3; color: var(--text); }
+.timeline-desc { font-size: 13px; color: var(--text-secondary); line-height: 1.55; }
+.timeline-item.current { background: linear-gradient(135deg, rgba(196, 122, 42, 0.06) 0%, rgba(184, 150, 62, 0.04) 100%); border: 1.5px solid var(--amber-border); box-shadow: 0 8px 24px rgba(196, 122, 42, 0.12); padding-left: 32px; }
+.timeline-item.current::before { content: ''; position: absolute; left: 0; top: 12px; bottom: 12px; width: 4px; background: linear-gradient(180deg, var(--amber), var(--gold)); border-radius: 0 4px 4px 0; }
+.timeline-item.current::after { content: ''; position: absolute; left: -4px; top: 24px; width: 12px; height: 12px; border-radius: 50%; background: var(--amber); box-shadow: 0 0 0 4px var(--bg), 0 0 0 5px var(--amber-border); }
+.timeline-item.current:hover { transform: translateX(6px); box-shadow: 0 12px 32px rgba(196, 122, 42, 0.18); }
+.timeline-item.current .timeline-date-main { color: var(--amber); }
+.timeline-item.current .timeline-title { color: var(--burgundy); }
+.timeline-current-tag { display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; background: var(--amber); color: white; font-size: 10px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; border-radius: 100px; margin-left: 8px; vertical-align: middle; }
+.timeline-current-tag::before { content: ''; width: 6px; height: 6px; background: white; border-radius: 50%; animation: blink 1.5s infinite; }
+@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+.timeline-item.past { opacity: 0.85; }
+.timeline-item.past .timeline-date-main { color: var(--text-tertiary); }
+.timeline-item.planned { background: var(--bg-surface); border-style: dashed; opacity: 0.75; }
+.timeline-item.planned .timeline-title { font-style: italic; }
+
+.patho-field { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--border); font-size: 14px; gap: 12px; align-items: baseline; flex-wrap: wrap; }
+.patho-field:last-child { border-bottom: none; }
+.patho-field-label { color: var(--text-tertiary); font-weight: 500; flex-shrink: 0; }
+.patho-field-value { font-weight: 600; text-align: right; word-break: break-word; }
+.depth-viz { display: flex; flex-direction: column; gap: 8px; margin: 20px 0; }
+.depth-layer { display: flex; align-items: center; gap: 12px; padding: 14px 16px; border-radius: 12px; background: var(--bg-surface); border: 1px solid var(--border); font-size: 14px; transition: all 0.3s; cursor: pointer; }
+.depth-layer:hover { transform: translateX(4px); box-shadow: var(--shadow-sm); }
+.depth-layer.invaded { background: var(--burgundy-pale); border-color: var(--burgundy-border); }
+.depth-layer .layer-name { flex: 1; font-weight: 500; }
+.depth-layer .layer-status { font-size: 10px; padding: 4px 10px; border-radius: 100px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; }
+.depth-layer.invaded .layer-status { background: var(--burgundy); color: white; }
+.depth-layer:not(.invaded) .layer-status { background: var(--gold-pale); color: var(--gold-deep); border: 1px solid var(--gold-border); }
+
+.collapsible { border: 1px solid var(--border); border-radius: var(--radius-lg); margin-bottom: 14px; overflow: hidden; background: var(--bg-card); }
+.collapsible-header { padding: 18px 20px; background: var(--bg-surface); cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-size: 15px; font-weight: 600; transition: background 0.2s; letter-spacing: -0.2px; gap: 10px; }
+.collapsible-header:hover { background: var(--bg-hover); }
+.collapsible-header .chevron { transition: transform 0.3s; color: var(--gold); font-size: 12px; flex-shrink: 0; }
+.collapsible.open .chevron { transform: rotate(180deg); }
+.collapsible-content { max-height: 0; overflow: hidden; transition: max-height 0.4s cubic-bezier(0.4,0,0.2,1); }
+.collapsible.open .collapsible-content { max-height: 5000px; }
+.collapsible-inner { padding: 20px; border-top: 1px solid var(--border); }
+
+.premed-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 8px; }
+.premed-item { background: var(--bg-surface); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; display: flex; justify-content: space-between; align-items: center; font-size: 14px; transition: all 0.2s; cursor: pointer; }
+.premed-item:hover { border-color: var(--gold-border); background: var(--gold-pale); transform: translateY(-2px); box-shadow: var(--shadow-sm); }
+.premed-name { font-weight: 600; }
+.premed-dose { font-family: var(--font-mono); font-size: 12px; color: var(--gold-deep); font-weight: 600; flex-shrink: 0; }
+.premed-purpose { font-size: 11px; color: var(--text-tertiary); margin-top: 2px; }
+
+.watchlist { display: flex; flex-direction: column; gap: 8px; }
+.watch-item { display: flex; gap: 14px; padding: 16px 18px; background: var(--bg-surface); border: 1px solid var(--border); border-radius: 12px; font-size: 14px; align-items: flex-start; transition: all 0.2s; cursor: pointer; }
+.watch-item:hover { border-color: var(--gold-border); background: var(--gold-pale); transform: translateX(4px); }
+.watch-icon { width: 26px; height: 26px; border-radius: 50%; background: var(--gold-pale); color: var(--gold-deep); display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 12px; font-weight: 700; border: 1px solid var(--gold-border); }
+
+/* ============================================ */
+/* LAB TABLE - PROPERLY CONTAINED               */
+/* ============================================ */
+.lab-table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  box-sizing: border-box;
+  -webkit-overflow-scrolling: touch;
+}
+
+.lab-trend-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  min-width: 520px;
+}
+
+.lab-trend-table th {
+  text-align: left;
+  padding: 14px 16px;
+  background: var(--bg-surface);
+  font-weight: 600;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-tertiary);
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+.lab-trend-table td {
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border);
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+.lab-trend-table tr:last-child td { border-bottom: none; }
+.lab-trend-table tbody tr { transition: background 0.2s; }
+.lab-trend-table tbody tr:hover { background: var(--gold-pale); }
+.lab-trend-table .test-name { font-family: var(--font-sans); font-weight: 600; white-space: normal; }
+.trend-up, .trend-down { color: var(--teal); font-weight: 600; }
+.trend-stable { color: var(--text-quaternary); }
+.status-good { color: var(--teal); font-weight: 600; }
+.status-warn { color: var(--amber); font-weight: 600; }
+.status-bad { color: var(--burgundy); font-weight: 600; }
+
+/* KV Row */
+.kv-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 14px; gap: 12px; align-items: baseline; flex-wrap: wrap; }
+.kv-row:last-child { border-bottom: none; }
+.kv-row .k { color: var(--text-tertiary); font-weight: 500; flex-shrink: 0; }
+.kv-row .v { font-weight: 600; text-align: right; word-break: break-word; min-width: 0; }
+
+.tag { display: inline-flex; align-items: center; gap: 4px; padding: 4px 10px; border-radius: 100px; font-size: 11px; font-weight: 600; background: var(--bg-surface); border: 1px solid var(--border); letter-spacing: 0.2px; flex-shrink: 0; }
+.tag.success { background: var(--gold-pale); color: var(--gold-deep); border-color: var(--gold-border); }
+.tag.warning { background: rgba(160, 96, 48, 0.08); color: var(--amber); border-color: rgba(160, 96, 48, 0.25); }
+.tag.danger { background: var(--burgundy-pale); color: var(--burgundy); border-color: var(--burgundy-border); }
+.tag.info { background: var(--teal-pale); color: var(--teal); border-color: var(--teal-border); }
+.tag.infusing { background: var(--amber-pale); color: var(--amber); border-color: var(--amber-border); font-weight: 700; animation: tag-pulse 2s infinite; }
+@keyframes tag-pulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(196, 122, 42, 0.3); } 50% { box-shadow: 0 0 0 4px rgba(196, 122, 42, 0); } }
+
+.footer { margin-top: 48px; padding: 32px 20px; border-top: 1px solid var(--border); text-align: center; color: var(--text-tertiary); font-size: 13px; position: relative; }
+.footer::before { content: '❖'; position: absolute; top: -10px; left: 50%; transform: translateX(-50%); background: var(--bg); padding: 0 12px; color: var(--gold); font-size: 14px; }
+.footer .sources { margin-top: 12px; font-family: var(--font-mono); font-size: 10px; line-height: 1.6; color: var(--text-quaternary); letter-spacing: 0.2px; word-break: break-word; }
+
+.mono { font-family: var(--font-mono); }
+.small { font-size: 12px; }
+.muted { color: var(--text-tertiary); }
+.dim { color: var(--text-secondary); }
+.mt-1 { margin-top: 8px; } .mt-2 { margin-top: 16px; } .mt-3 { margin-top: 24px; }
+.mb-2 { margin-bottom: 16px; }
+.divider { height: 1px; background: var(--border); margin: 16px 0; }
+
+/* ============================================ */
+/* 3D SURGERY DIAGRAM - ENLARGED, TITLE/LEGEND  */
+/* OUTSIDE THE BOX FOR CLEAN VIEW               */
+/* ============================================ */
+.surgery-diagram-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 28px;
+  margin: 24px 0;
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+  max-width: 100%;
+}
+
+.surgery-diagram-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 20px;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.surgery-diagram-title-block h3 {
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+  color: var(--text);
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.surgery-diagram-title-block h3 .icon {
+  width: 36px; height: 36px;
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--teal-pale);
+  border: 1px solid var(--teal-border);
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.surgery-diagram-title-block p {
+  font-size: 13px;
+  color: var(--text-tertiary);
+  margin-left: 46px;
+}
+
+.surgery-3d-container {
+  position: relative;
+  width: 100%;
+  height: 640px;  /* Enlarged from 520px */
+  background: linear-gradient(135deg, #faf8f4 0%, #f0ebe0 100%);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--border);
+}
+
+.surgery-3d-container canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.surgery-legend-below {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+}
+
+.surgery-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.surgery-legend-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  border: 2px solid rgba(0,0,0,0.08);
+}
+
+.surgery-legend-full {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 14px;
+  margin-top: 20px;
+}
+
+.surgery-legend-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 16px;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.surgery-legend-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 16px;
+}
+
+.surgery-legend-card strong {
+  display: block;
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 2px;
+  letter-spacing: -0.2px;
+  color: var(--text);
+}
+
+.surgery-legend-card span {
+  color: var(--text-secondary);
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+/* RBC Grid for Mobile Optimization */
+.rbc-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 16px; width: 100%; }
+.rbc-item { background: var(--burgundy-pale); border: 1px solid var(--burgundy-border); border-radius: 12px; padding: 16px 12px; text-align: center; transition: all 0.2s; cursor: pointer; overflow: hidden; }
+.rbc-item:hover { transform: translateY(-2px); box-shadow: var(--shadow-sm); }
+.rbc-item .rbc-name { font-size: 13px; font-weight: 700; color: var(--burgundy); margin-bottom: 4px; word-break: break-word; }
+.rbc-item .rbc-desc { font-size: 11px; color: var(--text-secondary); line-height: 1.3; word-break: break-word; }
+
+/* ============================================ */
+/* RESPONSIVE - MOBILE OPTIMIZATION             */
+/* ============================================ */
+@media (max-width: 768px) {
+  .container { padding: 14px 12px; overflow-x: hidden; width: 100%; max-width: 100%; }
+  .hero { padding: 20px 16px; margin-bottom: 18px; border-radius: var(--radius-lg); }
+  .hero-top { gap: 14px; margin-bottom: 18px; }
+  .patient-identity { gap: 14px; }
+  .patient-name h1 { font-size: 26px; letter-spacing: -0.5px; }
+  .patient-name .sub { font-size: 12px; }
+  .avatar { width: 68px; height: 68px; font-size: 22px; }
+  .hero-meta { gap: 6px; }
+  .meta-chip { padding: 6px 10px; font-size: 11px; gap: 6px; }
+  .meta-chip .label { font-size: 9px; }
+  .meta-chip .value { font-size: 12px; }
+  .quick-stats { gap: 8px; grid-template-columns: repeat(2, 1fr); }
+  .stat-card { padding: 14px; border-radius: var(--radius); }
+  .stat-card .stat-label { font-size: 10px; margin-bottom: 6px; }
+  .stat-card .stat-value { font-size: 24px; margin-bottom: 4px; }
+  .stat-card .stat-sub { font-size: 11px; line-height: 1.3; }
+  .section { margin-bottom: 26px; }
+  .section-header { margin-bottom: 14px; padding-bottom: 10px; gap: 8px; }
+  .section-header h2 { font-size: 22px; letter-spacing: -0.3px; }
+  .section-header .section-sub { font-size: 12px; margin-top: 2px; }
+  .card { padding: 18px 14px; margin-bottom: 12px; border-radius: var(--radius); }
+  .card-header { margin-bottom: 14px; gap: 10px; }
+  .card-title { font-size: 17px; gap: 8px; }
+  .card-title .icon { width: 32px; height: 32px; font-size: 14px; border-radius: 8px; }
+  .card-subtitle { font-size: 12px; margin-top: 2px; }
+  .grid { gap: 12px; }
+  .tnm-grid { grid-template-columns: 1fr; gap: 8px; margin-bottom: 14px; }
+  .tnm-letter { font-size: 38px; }
+  .tnm-box { padding: 14px 12px; }
+  .tnm-value { font-size: 13px; }
+  .tnm-desc { font-size: 11px; }
+  .stage-pill { padding: 6px 12px; font-size: 12px; }
+  .cycle-tracker { gap: 4px; margin-bottom: 14px; }
+  .cycle-dot { min-width: 34px; height: 48px; border-radius: 10px; }
+  .cycle-dot .num { font-size: 17px; }
+  .cycle-dot .label { font-size: 8px; }
+  .progress-bar { height: 5px; margin-bottom: 12px; }
+  .weight-chart-container { height: 200px; margin: 14px 0; }
+  .chart-tooltip { padding: 8px 12px; min-width: 100px; }
+  .chart-tooltip .tt-value { font-size: 17px; }
+  .chart-x-label { font-size: 10px; }
+  .chart-x-label .label-sub { font-size: 9px; }
+  .lymph-viz { padding: 12px; gap: 4px; margin: 14px 0; }
+  .lymph-node { width: 12px; height: 12px; }
+  .lymph-stats { margin-top: 14px; padding-top: 14px; }
+  .lymph-stat-num { font-size: 28px; }
+  .lymph-stat-label { font-size: 10px; margin-top: 4px; }
+  .alert { padding: 12px 14px; gap: 10px; margin-bottom: 10px; border-radius: 12px; }
+  .alert-icon { width: 24px; height: 24px; font-size: 12px; }
+  .alert-title { font-size: 14px; margin-bottom: 3px; }
+  .alert-desc { font-size: 12px; line-height: 1.45; }
+  .drug-card { padding: 16px 14px; margin-bottom: 10px; border-radius: var(--radius); }
+  .drug-header { margin-bottom: 12px; padding-bottom: 10px; }
+  .drug-name { font-size: 18px; }
+  .drug-dose { font-size: 12px; }
+  .drug-details { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .drug-detail-label { font-size: 9px; }
+  .drug-detail-value { font-size: 12px; }
+  .regimen-compare { grid-template-columns: 1fr; gap: 10px; }
+  .regimen-card { padding: 18px 14px; border-radius: var(--radius); }
+  .regimen-badge { font-size: 9px; padding: 3px 8px; top: 12px; right: 12px; }
+  .regimen-name { font-size: 22px; }
+  .regimen-sub { font-size: 12px; margin-bottom: 12px; }
+  .regimen-info { font-size: 12px; }
+  .infusion-sequence { padding: 14px 10px; gap: 4px; margin-bottom: 14px; }
+  .seq-step { min-width: 68px; padding: 10px 10px; border-radius: 12px; }
+  .seq-step .seq-num { font-size: 17px; }
+  .seq-step .seq-name { font-size: 10px; }
+  .seq-arrow { font-size: 16px; }
+  
+  /* Timeline Mobile */
+  .timeline { gap: 8px; }
+  .timeline-item {
+    grid-template-columns: 1fr;
+    gap: 8px;
+    padding: 14px 16px;
+    border-radius: 12px;
+  }
+  .timeline-date-cell {
+    flex-direction: row;
+    gap: 8px;
+    align-items: baseline;
+    padding-top: 0;
+    flex-wrap: wrap;
+  }
+  .timeline-date-main { font-size: 12px; }
+  .timeline-date-sub { font-size: 10px; }
+  .timeline-title { font-size: 14px; margin-bottom: 4px; }
+  .timeline-desc { font-size: 12px; line-height: 1.5; }
+  .timeline-item.current { padding: 16px 16px 16px 24px; margin: 4px 0; }
+  .timeline-item.current::before { top: 8px; bottom: 8px; width: 3px; }
+  .timeline-item.current::after { left: -3px; top: 18px; width: 10px; height: 10px; }
+  .timeline-current-tag { font-size: 9px; padding: 2px 8px; margin-left: 6px; }
+  
+  .patho-field { flex-direction: column; align-items: flex-start; gap: 4px; padding: 10px 0; }
+  .patho-field-value { text-align: left; font-size: 13px; }
+  .depth-viz { gap: 6px; margin: 14px 0; }
+  .depth-layer { padding: 10px 12px; font-size: 12px; gap: 8px; border-radius: 10px; }
+  .depth-layer .layer-status { font-size: 9px; padding: 3px 8px; }
+  .premed-list { grid-template-columns: 1fr; gap: 6px; }
+  .premed-item { padding: 12px 14px; font-size: 13px; border-radius: 10px; }
+  .premed-name { font-size: 13px; }
+  .premed-dose { font-size: 11px; }
+  .premed-purpose { font-size: 10px; }
+  .watch-item { padding: 12px 14px; font-size: 12px; gap: 10px; border-radius: 10px; }
+  .watch-icon { width: 22px; height: 22px; font-size: 11px; }
+  .kv-row { flex-direction: column; align-items: flex-start; gap: 3px; padding: 7px 0; font-size: 13px; }
+  .kv-row .k { font-size: 11px; }
+  .kv-row .v { text-align: left; font-size: 12px; }
+  
+  /* ============================================ */
+  /* LAB TABLE - MOBILE FIX (NO PROTRUSION)       */
+  /* ============================================ */
+  .lab-table-wrapper {
+    width: 100%;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--bg-card);
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  .lab-trend-table {
+    min-width: 480px;
+    width: 100%;
+    font-size: 12px;
+  }
+  
+  .lab-trend-table th {
+    padding: 10px 10px;
+    font-size: 10px;
+  }
+  
+  .lab-trend-table td {
+    padding: 10px 10px;
+    font-size: 12px;
+  }
+  
+  .lab-trend-table .test-name {
+    font-size: 12px;
+    max-width: 140px;
+  }
+  
+  .lab-trend-table .trend-up,
+  .lab-trend-table .trend-down,
+  .lab-trend-table .trend-stable {
+    font-size: 11px;
+  }
+  
+  .lab-trend-table .status-good,
+  .lab-trend-table .status-warn,
+  .lab-trend-table .status-bad {
+    font-size: 11px;
+  }
+  
+  .collapsible-header { padding: 14px 16px; font-size: 13px; }
+  .collapsible-inner { padding: 14px; }
+  .footer { padding: 20px 14px; margin-top: 28px; }
+  .footer::before { font-size: 12px; }
+  .footer .sources { font-size: 9px; line-height: 1.5; }
+  
+  /* 3D Colon Mobile */
+  .colon-3d-mobile-header { display: block; padding: 12px 16px; }
+  .colon-3d-mobile-header h3 { font-size: 14px; }
+  .colon-3d-mobile-header p { font-size: 11px; }
+  .colon-3d-mobile-legend { display: block; padding: 14px 16px; }
+  .colon-3d-container { height: 380px; border-radius: 0; margin-bottom: 0; border-top: none; border-bottom: none; }
+  .colon-3d-overlay { display: none; }
+  .colon-3d-legend { display: none; }
+  .colon-3d-hint { bottom: 8px; right: 8px; font-size: 9px; padding: 5px 8px; }
+  .colon-3d-controls-mobile { position: absolute; top: 8px; right: 8px; display: flex; gap: 5px; z-index: 10; }
+  .colon-3d-btn-mobile { width: 30px; height: 30px; border-radius: 50%; background: rgba(0,0,0,0.6); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.15); color: white; cursor: pointer; font-size: 11px; display: flex; align-items: center; justify-content: center; }
+  
+  /* 3D Surgery Mobile - Enlarged */
+  .surgery-diagram-card {
+    padding: 18px 14px;
+    margin: 16px 0;
+    border-radius: var(--radius);
+  }
+  
+  .surgery-diagram-header {
+    margin-bottom: 14px;
+    gap: 10px;
+  }
+  
+  .surgery-diagram-title-block h3 {
+    font-size: 16px;
+  }
+  
+  .surgery-diagram-title-block h3 .icon {
+    width: 30px; height: 30px;
+    font-size: 14px;
+  }
+  
+  .surgery-diagram-title-block p {
+    font-size: 11px;
+    margin-left: 40px;
+  }
+  
+  .surgery-3d-container {
+    height: 480px;  /* Enlarged from 360px */
+    border-radius: var(--radius);
+  }
+  
+  .surgery-legend-below {
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-top: 14px;
+    padding-top: 14px;
+  }
+  
+  .surgery-legend-item {
+    font-size: 11px;
+    gap: 8px;
+  }
+  
+  .surgery-legend-dot {
+    width: 12px;
+    height: 12px;
+  }
+  
+  .surgery-legend-full {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    margin-top: 14px;
+  }
+  
+  .surgery-legend-card { padding: 12px 14px; }
+  .surgery-legend-icon { width: 28px; height: 28px; font-size: 14px; }
+  .surgery-legend-card strong { font-size: 12px; }
+  .surgery-legend-card span { font-size: 11px; }
+  
+  /* RBC Mobile - Contained */
+  .rbc-grid {
+    grid-template-columns: 1fr;
+    gap: 6px;
+    width: 100%;
+    max-width: 100%;
+  }
+  .rbc-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-align: left;
+    padding: 12px 14px;
+    border-radius: 10px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  .rbc-item .rbc-name {
+    margin-bottom: 0;
+    font-size: 12px;
+    min-width: 90px;
+    flex-shrink: 0;
+  }
+  .rbc-item .rbc-desc { font-size: 11px; flex: 1; min-width: 0; }
+  
+  .detail-panel { width: 100%; max-width: 100%; right: -100%; padding: 20px 16px; }
+  .detail-panel h2 { font-size: 18px; }
+  .detail-label { font-size: 9px; }
+  .detail-value { font-size: 13px; }
+  
+  .tag { padding: 3px 8px; font-size: 10px; }
+  .small { font-size: 11px; }
+  .divider { margin: 12px 0; }
+}
+
+.colon-3d-controls-mobile { display: none; }
+@media (max-width: 768px) { .colon-3d-controls-mobile { display: flex; } }
+@media (min-width: 769px) { .colon-3d-controls-mobile { display: none !important; } }
+
+@media (max-width: 480px) {
+  .container { padding: 10px 8px; }
+  .hero { padding: 16px 12px; }
+  .patient-identity { flex-direction: column; text-align: center; gap: 10px; }
+  .hero-top { flex-direction: column; align-items: center; }
+  .hero-meta { justify-content: center; }
+  .quick-stats { grid-template-columns: 1fr 1fr; gap: 6px; }
+  .stat-card .stat-value { font-size: 22px; }
+  .patient-name h1 { font-size: 22px; }
+  .colon-3d-container { height: 340px; }
+  .surgery-3d-container { height: 400px; }  /* Still enlarged on small screens */
+  
+  .surgery-diagram-card { padding: 14px 12px; }
+  .surgery-diagram-title-block h3 { font-size: 15px; }
+  .surgery-diagram-title-block p { font-size: 10px; margin-left: 38px; }
+  .surgery-legend-below { grid-template-columns: 1fr; }
+}
+
+@media (min-width: 1200px) { .container { padding: 32px 28px; } }
+
+@keyframes fadeInUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+.card, .stat-card, .alert { animation: fadeInUp 0.4s ease-out; }
+</style>
+</head>
+<body class="lang-en">
+
+<!-- Sticky Nav -->
+<nav class="sticky-nav" id="stickyNav">
+  <div class="nav-container">
+    <div class="nav-brand">
+      <div class="nav-brand-mark">ช</div>
+      <span><span class="en">Chatchamon Chen</span><span class="th">ชัชชมนต์ เชน</span></span>
+    </div>
+    <div class="nav-tabs" id="navTabs">
+      <button class="nav-tab active" data-section="overview"><span class="en">Overview</span><span class="th">ภาพรวม</span></button>
+      <button class="nav-tab" data-section="pathology"><span class="en">Pathology</span><span class="th">พยาธิ</span></button>
+      <button class="nav-tab" data-section="chemo"><span class="en">Chemo</span><span class="th">เคมี</span></button>
+      <button class="nav-tab" data-section="labs"><span class="en">Labs</span><span class="th">เลือด</span></button>
+      <button class="nav-tab" data-section="timeline"><span class="en">Timeline</span><span class="th">ไทม์ไลน์</span></button>
+      <button class="nav-tab" data-section="reports"><span class="en">Reports</span><span class="th">รายงาน</span></button>
+    </div>
+    <div class="lang-toggle">
+      <button class="lang-btn active" data-lang="en" onclick="switchLang('en')">EN</button>
+      <button class="lang-btn" data-lang="th" onclick="switchLang('th')">TH</button>
+    </div>
+  </div>
+</nav>
+
+<div class="container">
+
+  <!-- Hero -->
+  <div class="hero">
+    <div class="hero-top">
+      <div class="patient-identity">
+        <div class="avatar"><img src="profile.jpg" alt="Chatchamon Chen" onerror="this.style.display='none'; this.parentElement.innerHTML='ชช';"></div>
+        <div class="patient-name">
+          <h1><span class="en">Chatchamon Chen</span><span class="th">นางชัชชมนต์ เชน</span></h1>
+          <div class="sub">HN 690780913 · AN 690780517 · Chularat 3 International Hospital</div>
+        </div>
+      </div>
+      <div class="hero-meta">
+        <div class="meta-chip"><span class="dot"></span><div><div class="label"><span class="en">Infusing Now</span><span class="th">กำลังให้ยา</span></div><div class="value"><span class="en">8 Jul 2026 · Cycle 2</span><span class="th">8 ก.ค. 2569 · Cycle 2</span></div></div></div>
+        <div class="meta-chip"><div><div class="label"><span class="en">Physician</span><span class="th">แพทย์</span></div><div class="value"><span class="en">Dr. Nathanich Suriyaphan</span><span class="th">พญ.ณัฐนิช สุริยาพันธ์</span></div></div></div>
+        <div class="meta-chip"><div><div class="label"><span class="en">Coverage</span><span class="th">สิทธิ</span></div><div class="value"><span class="en">Universal Health</span><span class="th">บัตรทอง · UHC</span></div></div></div>
+      </div>
+    </div>
+
+    <div class="quick-stats">
+      <div class="stat-card stage"><div class="stat-label"><span class="en">🎯 Stage</span><span class="th">🎯 ระยะโรค</span></div><div class="stat-value">IIIC</div><div class="stat-sub"><span class="en">pT4 N2 M0 · Colon Cancer</span><span class="th">pT4 N2 M0 · มะเร็งลำไส้ใหญ่</span></div></div>
+      <div class="stat-card cycles"><div class="stat-label"><span class="en">💉 Chemotherapy</span><span class="th">💉 เคมีบำบัด</span></div><div class="stat-value">2<span class="muted" style="font-size:18px;">/8</span></div><div class="stat-sub"><span class="en">2 completed · 6 remaining</span><span class="th">เสร็จแล้ว 2 รอบ · เหลือ 6 รอบ</span></div></div>
+      <div class="stat-card weight"><div class="stat-label"><span class="en">⚖️ Weight</span><span class="th">⚖️ น้ำหนัก</span></div><div class="stat-value">44.0<span class="muted" style="font-size:14px;"> kg</span></div><div class="stat-sub"><span class="en">BMI 17.19 · ↓4.8 kg in 3 months</span><span class="th">BMI 17.19 · ลด 4.8 kg ใน 3 เดือน</span></div></div>
+      <div class="stat-card infusing"><div class="stat-label"><span class="en">⏱️ 5-FU Infusing</span><span class="th">⏱️ 5-FU กำลังให้</span></div><div class="stat-value">23<span class="muted" style="font-size:14px;"> hr</span></div><div class="stat-sub"><span class="en">1660 mg in NSS 1000 mL · Started 9:55 AM</span><span class="th">1660 mg ใน NSS 1000 mL · เริ่ม 9:55 น.</span></div></div>
+      <div class="stat-card"><div class="stat-label"><span class="en">📅 Next Appt</span><span class="th">📅 นัดถัดไป</span></div><div class="stat-value"><span class="en">19<span class="muted" style="font-size:14px;"> Jul</span></span><span class="th">19<span class="muted" style="font-size:14px;"> ก.ค.</span></span></div><div class="stat-sub"><span class="en">Cycle 3 · mFOLFOX6</span><span class="th">Cycle 3 · mFOLFOX6</span></div></div>
+    </div>
+  </div>
+
+  <!-- OVERVIEW -->
+  <div class="section" id="overview">
+    <div class="section-header">
+      <div>
+        <h2><span class="en">Treatment Overview</span><span class="th">ภาพรวมการรักษา</span></h2>
+        <div class="section-sub"><span class="en">Interactive 3D anatomy · Essential information at a glance</span><span class="th">แผนที่ 3D แบบโต้ตอบ · ข้อมูลสำคัญที่ต้องรู้</span></div>
+      </div>
+    </div>
+
+    <div class="colon-3d-mobile-header">
+      <h3><span class="en">🧬 Interactive 3D Colon Map</span><span class="th">🧬 แผนที่ลำไส้ใหญ่ 3D</span></h3>
+      <p><span class="en">Drag to rotate · Scroll to zoom · Tap markers for details</span><span class="th">ลากเพื่อหมุน · เลื่อนเพื่อซูม · แตะที่จุดเพื่อดูรายละเอียด</span></p>
+    </div>
+
+    <div class="colon-3d-container" id="colon3dContainer">
+      <div class="colon-3d-overlay">
+        <div class="colon-3d-title">
+          <h3><span class="en">🧬 Interactive 3D Colon Map</span><span class="th">🧬 แผนที่ลำไส้ใหญ่ 3D</span></h3>
+          <p><span class="en">Drag to rotate · Scroll to zoom · Click markers</span><span class="th">ลากเพื่อหมุน · เลื่อนเพื่อซูม · คลิกที่จุด</span></p>
+        </div>
+        <div class="colon-3d-controls">
+          <button class="colon-3d-btn" onclick="resetCamera()" title="Reset View">↺</button>
+          <button class="colon-3d-btn" onclick="toggleAutoRotate()" title="Auto Rotate">↻</button>
+          <button class="colon-3d-btn" onclick="focusTumor()" title="Focus Tumor">🎯</button>
+        </div>
+      </div>
+      <div class="colon-3d-controls-mobile">
+        <button class="colon-3d-btn-mobile" onclick="resetCamera()" title="Reset View">↺</button>
+        <button class="colon-3d-btn-mobile" onclick="toggleAutoRotate()" title="Auto Rotate">↻</button>
+        <button class="colon-3d-btn-mobile" onclick="focusTumor()" title="Focus Tumor">🎯</button>
+      </div>
+      <div class="colon-3d-legend">
+        <div class="legend-row"><div class="legend-dot" style="background: #ef4444;"></div><span><span class="en">Tumor</span><span class="th">ก้อนมะเร็ง</span></span></div>
+        <div class="legend-row"><div class="legend-dot" style="background: #fbbf24;"></div><span><span class="en">Polyps (FAP)</span><span class="th">ติ่งเนื้อ (FAP)</span></span></div>
+        <div class="legend-row"><div class="legend-dot" style="background: #ef4444; opacity: 0.7;"></div><span><span class="en">Lymph Nodes (9+)</span><span class="th">ต่อมน้ำเหลือง (9+)</span></span></div>
+        <div class="legend-row"><div class="legend-dot" style="background: #22c55e;"></div><span><span class="en">Clear Margins</span><span class="th">ขอบตัดสะอาด</span></span></div>
+      </div>
+      <div class="colon-3d-hint"><span class="en">🖱️ Drag to rotate · Scroll to zoom</span><span class="th">🖱️ ลากเพื่อหมุน · เลื่อนเพื่อซูม</span></div>
+      <div class="marker-tooltip" id="markerTooltip"><div class="tt-title" id="ttTitle"></div><div class="tt-content" id="ttContent"></div><div class="tt-status" id="ttStatus"></div></div>
+    </div>
+
+    <div class="colon-3d-mobile-legend">
+      <div class="mobile-legend-grid">
+        <div class="mobile-legend-item"><div class="mobile-legend-dot" style="background: #ef4444;"></div><span><span class="en">Tumor</span><span class="th">ก้อนมะเร็ง</span></span></div>
+        <div class="mobile-legend-item"><div class="mobile-legend-dot" style="background: #fbbf24;"></div><span><span class="en">Polyps (FAP) — 8 total</span><span class="th">ติ่งเนื้อ (FAP) — 8 จุด</span></span></div>
+        <div class="mobile-legend-item"><div class="mobile-legend-dot" style="background: #ef4444; opacity: 0.6;"></div><span><span class="en">Lymph Nodes (9+)</span><span class="th">ต่อมน้ำเหลือง (9+)</span></span></div>
+        <div class="mobile-legend-item"><div class="mobile-legend-dot" style="background: #22c55e;"></div><span><span class="en">Clear Margins</span><span class="th">ขอบตัดสะอาด</span></span></div>
+      </div>
+    </div>
+
+    <div class="grid grid-2">
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title"><span class="icon">🎯</span><span><span class="en">Confirmed Cancer Stage</span><span class="th">ระยะโรคที่ยืนยันแล้ว</span></span></div>
+            <div class="card-subtitle"><span class="en">Colon cancer at Hepatic Flexure (FAP-related)</span><span class="th">มะเร็งลำไส้ใหญ่บริเวณ Hepatic Flexure (FAP-related)</span></div>
+          </div>
+          <span class="stage-pill">⚠ Stage IIIC</span>
+        </div>
+        <div class="tnm-grid">
+          <div class="tnm-box"><div class="tnm-letter">T4</div><div class="tnm-value"><span class="en">Through bowel wall</span><span class="th">ทะลุผนังลำไส้</span></div><div class="tnm-desc"><span class="en">Invaded to Serosa (outermost layer)</span><span class="th">ลุกลามถึงชั้น Serosa (ชั้นนอกสุด)</span></div></div>
+          <div class="tnm-box"><div class="tnm-letter">N2</div><div class="tnm-value"><span class="en">Lymph nodes 9/53</span><span class="th">ต่อมน้ำเหลือง 9/53</span></div><div class="tnm-desc"><span class="en">≥ 4 nodes positive · All removed</span><span class="th">พบมะเร็ง ≥ 4 ต่อม · นำออกทั้งหมดแล้ว</span></div></div>
+          <div class="tnm-box"><div class="tnm-letter">M0</div><div class="tnm-value"><span class="en">No metastasis</span><span class="th">ไม่พบแพร่กระจาย</span></div><div class="tnm-desc"><span class="en">CT confirmed no lung/liver spread</span><span class="th">CT ยืนยันไม่พบที่ปอดหรือตับ</span></div></div>
+        </div>
+        <div class="alert info">
+          <div class="alert-icon">💡</div>
+          <div class="alert-content">
+            <div class="alert-title"><span class="en">Good News</span><span class="th">ข่าวดี</span></div>
+            <div class="alert-desc"><span class="en">M0 = No distant metastasis. CT Chest + Whole Abdomen confirmed cancer is confined to the colon and lymph nodes only — this is the best finding in the pathology report.</span><span class="th">M0 = ไม่พบการแพร่กระจายไกล CT Chest + Whole Abdomen ยืนยันว่ามะเร็งยังอยู่ในบริเวณลำไส้และต่อมน้ำเหลืองเท่านั้น — นี่คือผลที่ดีที่สุดในรายงานพยาธิ</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title"><span class="icon">💉</span><span><span class="en">Chemo Progress</span><span class="th">ความคืบหน้าเคมีบำบัด</span></span></div>
+            <div class="card-subtitle"><span class="en">Adjuvant · 8 cycles · ~6 months</span><span class="th">Adjuvant · 8 cycles · ~6 เดือน</span></div>
+          </div>
+          <span class="tag success">2/8</span>
+        </div>
+        <div class="cycle-tracker">
+          <div class="cycle-dot completed"><div class="num">1</div><div class="label">Done</div></div>
+          <div class="cycle-dot current"><div class="num">2</div><div class="label">Now</div></div>
+          <div class="cycle-dot upcoming"><div class="num">3</div><div class="label">Next</div></div>
+          <div class="cycle-dot upcoming"><div class="num">4</div><div class="label">Plan</div></div>
+          <div class="cycle-dot upcoming"><div class="num">5</div><div class="label">Plan</div></div>
+          <div class="cycle-dot upcoming"><div class="num">6</div><div class="label">Plan</div></div>
+          <div class="cycle-dot upcoming"><div class="num">7</div><div class="label">Plan</div></div>
+          <div class="cycle-dot upcoming"><div class="num">8</div><div class="label">Plan</div></div>
+        </div>
+        <div class="progress-bar"><div class="progress-fill" style="width: 25%"></div></div>
+        <div class="kv-row"><span class="k"><span class="en">Purpose</span><span class="th">วัตถุประสงค์</span></span><span class="v"><span class="en">Eliminate residual microscopic cancer cells</span><span class="th">กำจัดเซลล์มะเร็ง microscopic ที่หลงเหลือ</span></span></div>
+        <div class="kv-row"><span class="k"><span class="en">Current Regimen</span><span class="th">สูตรปัจจุบัน</span></span><span class="v" style="color: var(--teal)">mFOLFOX6</span></div>
+        <div class="kv-row"><span class="k"><span class="en">Frequency</span><span class="th">ความถี่</span></span><span class="v"><span class="en">Every 2 weeks</span><span class="th">ทุก 2 สัปดาห์</span></span></div>
+        <div class="kv-row"><span class="k"><span class="en">Total Duration</span><span class="th">ระยะเวลาทั้งหมด</span></span><span class="v">~6 <span class="en">months</span><span class="th">เดือน</span></span></div>
+        <div class="alert warning mt-2">
+          <div class="alert-icon">⚠</div>
+          <div class="alert-content">
+            <div class="alert-title"><span class="en">Side Effects to Watch</span><span class="th">ผลข้างเคียงที่ต้องระวัง</span></div>
+            <div class="alert-desc"><span class="en">Peripheral neuropathy · Nausea · Fatigue · <strong>Cold sensitivity — avoid cold drinks during treatment</strong></span><span class="th">ชาปลายมือ-เท้า (neuropathy) · คลื่นไส้ · อ่อนเพลีย · <strong>ไวต่อความเย็น — หลีกเลี่ยงเครื่องดื่มเย็นระหว่างรักษา</strong></span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card mt-3">
+      <div class="card-header">
+        <div>
+          <div class="card-title"><span class="icon">📈</span><span><span class="en">Weight Trend</span><span class="th">แนวโน้มน้ำหนัก</span></span></div>
+          <div class="card-subtitle"><span class="en">Monitor · BMI 17.19 = Underweight · Hover points for details</span><span class="th">ต้องเฝ้าระวัง · BMI 17.19 = น้ำหนักต่ำกว่าเกณฑ์ · เลื่อนเมาส์เพื่อดูรายละเอียด</span></div>
+        </div>
+        <span class="tag danger">↓ 4.8 kg</span>
+      </div>
+      <div class="weight-chart-container" id="weightChart">
+        <svg class="weight-chart-svg" viewBox="0 0 600 240" preserveAspectRatio="xMidYMid meet">
+          <defs>
+            <linearGradient id="lineGradient" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#7a2e3a"/><stop offset="50%" stop-color="#b8963e"/><stop offset="100%" stop-color="#2d5f5d"/></linearGradient>
+            <linearGradient id="areaGradient" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#b8963e" stop-opacity="0.25"/><stop offset="100%" stop-color="#b8963e" stop-opacity="0"/></linearGradient>
+          </defs>
+          <line class="chart-grid-line" x1="40" y1="40" x2="580" y2="40"/><line class="chart-grid-line" x1="40" y1="100" x2="580" y2="100"/><line class="chart-grid-line" x1="40" y1="160" x2="580" y2="160"/>
+          <text x="30" y="44" text-anchor="end" fill="#a89f94" font-size="11" font-family="Inter">50</text><text x="30" y="104" text-anchor="end" fill="#a89f94" font-size="11" font-family="Inter">47</text><text x="30" y="164" text-anchor="end" fill="#a89f94" font-size="11" font-family="Inter">44</text>
+          <path class="chart-area" d="M 60 50 L 200 110 L 360 170 L 540 190 L 540 220 L 60 220 Z"/>
+          <path class="chart-line" d="M 60 50 L 200 110 L 360 170 L 540 190"/>
+          <g class="chart-point" data-date="2 Apr 2026" data-value="48.8" data-label="Pre-surgery"><circle class="point-glow" cx="60" cy="50" r="16" fill="#7a2e3a" opacity="0.2"/><circle cx="60" cy="50" r="7" fill="#7a2e3a" stroke="white" stroke-width="2.5"/></g>
+          <g class="chart-point" data-date="15 Jun 2026" data-value="46.6" data-label="Cycle 1"><circle class="point-glow" cx="200" cy="110" r="16" fill="#b8963e" opacity="0.2"/><circle cx="200" cy="110" r="7" fill="#b8963e" stroke="white" stroke-width="2.5"/></g>
+          <g class="chart-point" data-date="23 Jun 2026" data-value="44.0" data-label="Regimen change"><circle class="point-glow" cx="360" cy="170" r="16" fill="#c47a2a" opacity="0.2"/><circle cx="360" cy="170" r="7" fill="#c47a2a" stroke="white" stroke-width="2.5"/></g>
+          <g class="chart-point" data-date="8 Jul 2026" data-value="44.0" data-label="Today · Cycle 2"><circle class="point-glow" cx="540" cy="190" r="16" fill="#2d5f5d" opacity="0.2"/><circle cx="540" cy="190" r="7" fill="#2d5f5d" stroke="white" stroke-width="2.5"/></g>
+        </svg>
+        <div class="chart-tooltip" id="chartTooltip"><div class="tt-date" id="ttDate"></div><div class="tt-value" id="ttValue"></div><div class="tt-label" id="ttLabel"></div></div>
+      </div>
+      <div class="chart-x-labels">
+        <div class="chart-x-label"><div><span class="en">2 Apr</span><span class="th">2 เม.ย.</span></div><div class="label-sub"><span class="en">Pre-op</span><span class="th">ก่อนผ่าตัด</span></div></div>
+        <div class="chart-x-label"><div><span class="en">15 Jun</span><span class="th">15 มิ.ย.</span></div><div class="label-sub">Cycle 1</div></div>
+        <div class="chart-x-label"><div><span class="en">23 Jun</span><span class="th">23 มิ.ย.</span></div><div class="label-sub"><span class="en">Regimen change</span><span class="th">เปลี่ยนสูตร</span></div></div>
+        <div class="chart-x-label"><div><span class="en">8 Jul</span><span class="th">8 ก.ค.</span></div><div class="label-sub"><span class="en">Today · Cycle 2</span><span class="th">วันนี้ · Cycle 2</span></div></div>
+      </div>
+      <div class="alert warning mt-3">
+        <div class="alert-icon">⚠</div>
+        <div class="alert-content">
+          <div class="alert-title"><span class="en">Priority · Monitor</span><span class="th">ต้องเฝ้าระวัง · Priority</span></div>
+          <div class="alert-desc"><span class="en">Weight stable at 44.0 kg since regimen switch (23 Jun) — good sign that weight loss has plateaued. Still need to increase calories and protein.</span><span class="th">น้ำหนักคงที่ที่ 44.0 kg ตั้งแต่เปลี่ยนสูตรยา (23 มิ.ย.) — สัญญาณดีที่น้ำหนักไม่ลดลงต่อ ·仍需เพิ่มแคลอรี่และโปรตีน</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card mt-3">
+      <div class="card-header">
+        <div>
+          <div class="card-title"><span class="icon">🔴</span><span><span class="en">Lymph Nodes</span><span class="th">ต่อมน้ำเหลือง</span></span></div>
+          <div class="card-subtitle"><span class="en">All 53 nodes removed · None remaining · Hover to explore</span><span class="th">แพทย์นำออกทั้งหมด 53 ต่อม · ไม่มีหลงเหลือ · เลื่อนเมาส์เพื่อดู</span></div>
+        </div>
+        <span class="tag danger">9/53</span>
+      </div>
+      <div class="lymph-viz" id="lymphViz"></div>
+      <div class="lymph-stats">
+        <div class="lymph-stat"><div class="lymph-stat-num" style="color: var(--burgundy)">9</div><div class="lymph-stat-label"><span class="en">Positive</span><span class="th">พบมะเร็ง</span></div></div>
+        <div class="lymph-stat"><div class="lymph-stat-num" style="color: var(--teal)">44</div><div class="lymph-stat-label"><span class="en">Negative</span><span class="th">ปกติ</span></div></div>
+        <div class="lymph-stat"><div class="lymph-stat-num">53</div><div class="lymph-stat-label"><span class="en">Removed</span><span class="th">นำออกทั้งหมด</span></div></div>
+      </div>
+      <div class="alert success mt-3">
+        <div class="alert-icon">✓</div>
+        <div class="alert-content">
+          <div class="alert-title"><span class="en">Key Reassurance</span><span class="th">ข่าวดี · Key Reassurance</span></div>
+          <div class="alert-desc"><span class="en">The surgeon removed all 53 lymph nodes. <strong>No cancerous nodes remain in the body.</strong></span><span class="th">แพทย์นำต่อมน้ำเหลืองออกทั้งหมด 53 ต่อม <strong>ไม่มีต่อมน้ำเหลืองที่ติดเชื้อหลงเหลืออยู่ในร่างกาย</strong></span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PATHOLOGY -->
+  <div class="section" id="pathology">
+    <div class="section-header">
+      <div>
+        <h2><span class="en">Pathology & Surgery</span><span class="th">พยาธิวิทยาและการผ่าตัด</span></h2>
+        <div class="section-sub"><span class="en">Tumor details, surgical anatomy, and invasion depth</span><span class="th">รายละเอียดก้อนมะเร็ง กายวิภาคการผ่าตัด และความลึกการลุกลาม</span></div>
+      </div>
+    </div>
+
+    <div class="grid grid-2">
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title"><span class="icon">🧫</span><span><span class="en">Pathology Report</span><span class="th">ผลพยาธิวิทยา</span></span></div>
+            <div class="card-subtitle"><span class="en">Surgical Pathology · Patho S2610824 · 26 Apr 2026</span><span class="th">Surgical Pathology · Patho S2610824 · 26 เม.ย. 2569</span></div>
+          </div>
+        </div>
+        <div class="patho-field"><span class="patho-field-label"><span class="en">🔬 Cell Type</span><span class="th">🔬 ชนิดเซลล์</span></span><span class="patho-field-value">Moderately differentiated adenocarcinoma</span></div>
+        <div class="patho-field"><span class="patho-field-label"><span class="en">📍 Location</span><span class="th">📍 ตำแหน่ง</span></span><span class="patho-field-value">Colon at Hepatic Flexure</span></div>
+        <div class="patho-field"><span class="patho-field-label"><span class="en">📏 Tumor Size</span><span class="th">📏 ขนาดก้อน</span></span><span class="patho-field-value mono">5.5 × 3.5 × 1.5 cm</span></div>
+        <div class="patho-field"><span class="patho-field-label"><span class="en">⚠️ Lymphovascular Invasion</span><span class="th">⚠️ Lymphovascular Invasion</span></span><span class="patho-field-value" style="color: var(--amber)"><span class="en">Present · In vessels</span><span class="th">Present · พบในหลอดเลือด</span></span></div>
+        <div class="patho-field"><span class="patho-field-label"><span class="en">✅ Margins (×3)</span><span class="th">✅ ขอบตัด · Margins (×3)</span></span><span class="patho-field-value" style="color: var(--teal)">R0 · Clear</span></div>
+        <div class="patho-field"><span class="patho-field-label"><span class="en">🧬 Genetic Testing</span><span class="th">🧬 Genetic Testing</span></span><span class="patho-field-value"><span class="en">FAP / AFAP / Lynch's · Pending at NCI</span><span class="th">FAP / AFAP / Lynch's · รอผลที่ NCI</span></span></div>
+        <div class="divider"></div>
+        <div class="small muted mb-2" style="font-weight: 600; text-transform: uppercase; letter-spacing: 1px; font-size: 11px;"><span class="en">🧱 Tumor Invasion Depth</span><span class="th">🧱 ความลึกการลุกลาม</span></div>
+        <div class="depth-viz">
+          <div class="depth-layer"><span class="layer-name"><span class="en">Mucosa · Inner</span><span class="th">Mucosa · ชั้นใน</span></span><span class="layer-status"><span class="en">✓ Invaded</span><span class="th">✓ ลุกลาม</span></span></div>
+          <div class="depth-layer"><span class="layer-name">Submucosa</span><span class="layer-status"><span class="en">✓ Invaded</span><span class="th">✓ ลุกลาม</span></span></div>
+          <div class="depth-layer"><span class="layer-name">Muscularis</span><span class="layer-status"><span class="en">✓ Invaded</span><span class="th">✓ ลุกลาม</span></span></div>
+          <div class="depth-layer invaded"><span class="layer-name"><span class="en">Serosa · Outermost</span><span class="th">Serosa · ชั้นนอกสุด</span></span><span class="layer-status">⚠ pT4</span></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title"><span class="icon">✂️</span><span><span class="en">Surgery Summary</span><span class="th">การผ่าตัด</span></span></div>
+            <div class="card-subtitle"><span class="en">Open Total Proctocolectomy + IPAA + Ileostomy · 21 Apr 2026</span><span class="th">Open Total Proctocolectomy + IPAA + Ileostomy · 21 เม.ย. 2569</span></div>
+          </div>
+          <span class="tag success">R0 Resection</span>
+        </div>
+        <div class="alert success">
+          <div class="alert-icon">✓</div>
+          <div class="alert-content">
+            <div class="alert-title"><span class="en">All 3 Margins Clear · R0 Resection</span><span class="th">ขอบตัดสะอาดทั้ง 3 ด้าน · R0 Resection</span></div>
+            <div class="alert-desc"><strong>Proximal</strong> · <span class="en">No carcinoma</span><span class="th">ไม่พบมะเร็ง</span><br><strong>Distal</strong> · <span class="en">No carcinoma</span><span class="th">ไม่พบมะเร็ง</span><br><strong>Radial</strong> · <span class="en">No carcinoma</span><span class="th">ไม่พบมะเร็ง</span></div>
+          </div>
+        </div>
+        <div class="divider"></div>
+        <div class="small muted mb-2" style="font-weight: 600; text-transform: uppercase; letter-spacing: 1px; font-size: 11px;"><span class="en">📋 Gross Examination</span><span class="th">📋 Gross Examination · ลักษณะชิ้นเนื้อ</span></div>
+        <div class="kv-row"><span class="k"><span class="en">Total colon length</span><span class="th">ความยาวลำไส้ทั้งหมด</span></span><span class="v mono">53 cm · circumference 7.0 cm</span></div>
+        <div class="kv-row"><span class="k"><span class="en">Tumor appearance</span><span class="th">ลักษณะก้อน</span></span><span class="v">Ulceroproliferative · light brown, firm, necrotic</span></div>
+        <div class="kv-row"><span class="k"><span class="en">Tumor distances</span><span class="th">ตำแหน่งก้อน</span></span><span class="v mono">19 cm proximal · 44 cm distal · 15.5 cm mesenteric</span></div>
+        <div class="kv-row"><span class="k"><span class="en">Remaining polyps</span><span class="th">ติ่งเนื้อที่เหลือ</span></span><span class="v"><span class="en">Multiple polyps 0.2–2.5 cm · largest 7.0 cm</span><span class="th">Multiple polyps 0.2–2.5 cm · ใหญ่สุด 7.0 cm</span></span></div>
+        <div class="kv-row"><span class="k">Pericolonic Fat Deposit</span><span class="v" style="color: var(--teal)"><span class="en">None ✓</span><span class="th">ไม่มี ✓</span></span></div>
+        <div class="kv-row"><span class="k"><span class="en">Appendix</span><span class="th">ไส้ติ่ง · Appendix</span></span><span class="v mono">4.0 × 0.4 cm · contains fecal material</span></div>
+        <div class="kv-row"><span class="k">Terminal Ileum</span><span class="v mono">13.5 cm long · 2.5 cm diameter</span></div>
+      </div>
+    </div>
+
+    <!-- 3D SURGERY DIAGRAM - RESTRUCTURED WITH TITLE/LEGEND OUTSIDE -->
+    <div class="surgery-diagram-card">
+      <div class="surgery-diagram-header">
+        <div class="surgery-diagram-title-block">
+          <h3>
+            <span class="icon" style="background: var(--teal-pale); border-color: var(--teal-border);">🏥</span>
+            <span><span class="en">Surgical Anatomy: IPAA & Ileostomy</span><span class="th">กายวิภาคการผ่าตัด: IPAA และ Ileostomy</span></span>
+          </h3>
+          <p><span class="en">Post-colectomy reconstruction · 3D medical illustration</span><span class="th">การสร้างทางเดินอาหารหลังการตัดลำไส้ใหญ่ทั้งหมด · ภาพประกอบทางการแพทย์ 3D</span></p>
+        </div>
+        <span class="tag info"><span class="en">3D Diagram</span><span class="th">แผนภาพ 3D</span></span>
+      </div>
+
+      <!-- 3D CONTAINER - CLEAN, NO OVERLAYS -->
+      <div class="surgery-3d-container" id="surgery3dContainer">
+        <!-- Only the Three.js canvas here -->
+      </div>
+
+      <!-- LEGEND OUTSIDE BELOW -->
+      <div class="surgery-legend-below">
+        <div class="surgery-legend-item">
+          <div class="surgery-legend-dot" style="background: #c47a2a;"></div>
+          <span><span class="en">Loop Ileostomy (stoma)</span><span class="th">Loop Ileostomy (รูเปิด)</span></span>
+        </div>
+        <div class="surgery-legend-item">
+          <div class="surgery-legend-dot" style="background: #7a2e3a;"></div>
+          <span><span class="en">J-Pouch (IPAA)</span><span class="th">J-Pouch (IPAA)</span></span>
+        </div>
+        <div class="surgery-legend-item">
+          <div class="surgery-legend-dot" style="background: #d4956a;"></div>
+          <span><span class="en">Small Intestine</span><span class="th">ลำไส้เล็ก</span></span>
+        </div>
+        <div class="surgery-legend-item">
+          <div class="surgery-legend-dot" style="background: #a89f94; opacity: 0.5;"></div>
+          <span><span class="en">Removed Colon (ghost)</span><span class="th">ลำไส้ใหญ่ที่ตัดออก</span></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Detailed Legend Cards -->
+    <div class="surgery-legend-full">
+      <div class="surgery-legend-card">
+        <div class="surgery-legend-icon" style="background: rgba(196, 122, 42, 0.12); color: var(--amber);">🔴</div>
+        <div><strong><span class="en">Loop Ileostomy</span><span class="th">Loop Ileostomy</span></strong><span><span class="en">Temporary stoma on abdominal wall where stool currently exits. Will be reversed in 3-6 months.</span><span class="th">รูเปิดลำไส้ชั่วคราวบนหน้าท้อง ซึ่งเป็นทางออกของอุจจาระในปัจจุบัน จะปิดใน 3-6 เดือน</span></span></div>
+      </div>
+      <div class="surgery-legend-card">
+        <div class="surgery-legend-icon" style="background: var(--burgundy-pale); color: var(--burgundy);">🎒</div>
+        <div><strong><span class="en">J-Pouch (IPAA)</span><span class="th">J-Pouch (IPAA)</span></strong><span><span class="en">Ileal pouch-anal anastomosis. A reservoir created from the end of the small intestine, folded into a J-shape and connected to the anus.</span><span class="th">การสร้างกระเปาะจากลำไส้เล็กส่วนปลาย พับเป็นรูปตัว J และต่อกับทวารหนัก เพื่อเก็บอุจจาระ</span></span></div>
+      </div>
+      <div class="surgery-legend-card">
+        <div class="surgery-legend-icon" style="background: var(--teal-pale); color: var(--teal);">〰️</div>
+        <div><strong><span class="en">Small Intestine</span><span class="th">ลำไส้เล็ก</span></strong><span><span class="en">Now handles all digestion and absorption. High-output stoma is common initially as it adapts.</span><span class="th">ทำหน้าที่ย่อยและดูดซึมทั้งหมด ในช่วงแรกรูเปิดอาจมีปริมาณมากเนื่องจากลำไส้เล็กกำลังปรับตัว</span></span></div>
+      </div>
+      <div class="surgery-legend-card">
+        <div class="surgery-legend-icon" style="background: rgba(0,0,0,0.05); color: var(--text-tertiary);">👻</div>
+        <div><strong><span class="en">Removed Colon</span><span class="th">ลำไส้ใหญ่ที่ตัดออก</span></strong><span><span class="en">Entire colon and rectum removed due to FAP and cancer. Shown as ghosted outline for anatomical reference.</span><span class="th">ตัดลำไส้ใหญ่และไส้ตรงทั้งหมดออกเนื่องจาก FAP และมะเร็ง แสดงเป็นเส้นประเพื่ออ้างอิงกายวิภาค</span></span></div>
+      </div>
+    </div>
+
+    <div class="card mt-3">
+      <div class="alert info">
+        <div class="alert-icon">💧</div>
+        <div class="alert-content">
+          <div class="alert-title"><span class="en">Current Status</span><span class="th">อาการปัจจุบัน · Current Status</span></div>
+          <div class="alert-desc"><span class="en">Passing both liquid and solid stool via temporary ileostomy — <strong>normal for ileostomy patients</strong>. The J-pouch is currently bypassed and will be activated after ileostomy reversal.</span><span class="th">ถ่ายออกทั้ง 2 ทาง (น้ำ + ก้อน) ผ่านรูเปิดลำไส้ชั่วคราว (ileostomy) — <strong>ปกติสำหรับผู้มี ileostomy</strong> J-pouch ยังไม่ได้ใช้งาน จะเริ่มใช้หลังปิดรูเปิดลำไส้</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHEMO -->
+  <div class="section" id="chemo">
+    <div class="section-header">
+      <div>
+        <h2><span class="en">Chemotherapy</span><span class="th">เคมีบำบัด</span></h2>
+        <div class="section-sub"><span class="en">Regimens, side effects, and treatment changes</span><span class="th">สูตรยา ผลข้างเคียง และการเปลี่ยนแปลงแผนการรักษา</span></div>
+      </div>
+    </div>
+
+    <div class="card" style="border: 2px solid var(--amber-border); box-shadow: var(--shadow-gold);">
+      <div class="card-header" style="border-bottom-color: var(--amber-border);">
+        <div>
+          <div class="card-title"><span class="icon" style="background: var(--amber-pale); border-color: var(--amber);">✨</span><span><span class="en">Today · Cycle 2 In Progress</span><span class="th">วันนี้ · Cycle 2 กำลังดำเนินการ</span></span></div>
+          <div class="card-subtitle"><span class="en">8 July 2026 · Chularat 3 International Hospital · Started 9:55 AM · 5-FU infusing (23 hrs)</span><span class="th">8 กรกฎาคม 2569 · โรงพยาบาลจุฬารัตน์ 3 อินเตอร์ · เริ่ม 9:55 น. · 5-FU กำลังให้ (23 ชม.)</span></div>
+        </div>
+        <span class="tag infusing"><span class="en">🟠 5-FU INFUSING</span><span class="th">🟠 5-FU กำลังให้</span></span>
+      </div>
+
+      <div class="alert success">
+        <div class="alert-icon">✓</div>
+        <div class="alert-content">
+          <div class="alert-title"><span class="en">IV Line Inserted · Venous access established</span><span class="th">IV Line ติดตั้งเรียบร้อย · สายสวนหลอดเลือดดำพร้อมใช้งาน</span></div>
+          <div class="alert-desc"><span class="en">IV catheter in dorsal hand with 4 blue 3-way stopcocks for multi-drug administration · Yellow Luer-lock connectors for infusion sets</span><span class="th">สาย IV ที่หลังมือ พร้อม 3-way stopcocks (สีน้ำเงิน) 4 ตัว สำหรับต่อยาหลายชนิด · Yellow Luer-lock connectors สำหรับต่อชุดให้ยา</span></div>
+        </div>
+      </div>
+
+      <div class="small muted mb-2" style="font-weight: 700; letter-spacing: 1px; text-transform: uppercase; font-size: 11px;"><span class="en">📋 Infusion Sequence</span><span class="th">📋 ลำดับการให้ยา</span></div>
+      <div class="infusion-sequence">
+        <div class="seq-step completed"><div class="seq-num">1</div><div class="seq-name"><span class="en">Ondansetron<br>30 min pre</span><span class="th">Ondansetron<br>30 นาทีก่อน</span></div></div>
+        <div class="seq-arrow">→</div>
+        <div class="seq-step completed"><div class="seq-num">2</div><div class="seq-name"><span class="en">Oxaliplatin<br>2 hrs</span><span class="th">Oxaliplatin<br>2 ชม.</span></div></div>
+        <div class="seq-arrow">→</div>
+        <div class="seq-step completed"><div class="seq-num">3</div><div class="seq-name"><span class="en">Leucovorin<br>2 hrs</span><span class="th">Leucovorin<br>2 ชม.</span></div></div>
+        <div class="seq-arrow">→</div>
+        <div class="seq-step active"><div class="seq-num">4</div><div class="seq-name"><span class="en">5-FU<br>23 hrs ⏱️</span><span class="th">5-FU<br>23 ชม. ⏱️</span></div></div>
+      </div>
+
+      <div class="regimen-compare" style="margin-bottom: 16px;">
+        <div class="drug-card high-alert">
+          <div class="drug-header">
+            <div><div class="drug-name">Oxaliplatin (OXOL)</div><div class="small muted" style="margin-top: 4px; font-size: 12px;"><span class="en">⚠️ High Alert · Do NOT mix/flush with NSS</span><span class="th">⚠️ ยาอันตรายสูง · ห้ามผสม/ไล่สายด้วย NSS</span></div></div>
+            <div class="drug-dose">110 mg (55 mL)</div>
+          </div>
+          <div class="drug-details">
+            <div class="drug-detail-item"><div class="drug-detail-label">Diluent</div><div class="drug-detail-value">D5W 250 mL</div></div>
+            <div class="drug-detail-item"><div class="drug-detail-label">Total Volume</div><div class="drug-detail-value">305 mL</div></div>
+            <div class="drug-detail-item"><div class="drug-detail-label">Infusion</div><div class="drug-detail-value">IV over 2 hours</div></div>
+            <div class="drug-detail-item"><div class="drug-detail-label">Dose/m²</div><div class="drug-detail-value">~85 mg/m²</div></div>
+            <div class="drug-detail-item"><div class="drug-detail-label">Mixed</div><div class="drug-detail-value">9:55 · 08/07/2569</div></div>
+            <div class="drug-detail-item"><div class="drug-detail-label">Expiry</div><div class="drug-detail-value">24 hours</div></div>
+            <div class="drug-detail-item"><div class="drug-detail-label"><span class="en">Prepared by</span><span class="th">เตรียมโดย</span></div><div class="drug-detail-value"><span class="en">Dr. Nathanich Suriyaphan</span><span class="th">พญ.ณัฐนิช สุริยาพันธ์</span></div></div>
+            <div class="drug-detail-item"><div class="drug-detail-label">Storage</div><div class="drug-detail-value"><span class="en">Refrigerate</span><span class="th">เก็บในตู้เย็น</span></div></div>
+          </div>
+        </div>
+        <div class="drug-card">
+          <div class="drug-header"><div class="drug-name">Leucovorin</div><div class="drug-dose">550 mg (55 mL)</div></div>
+          <div class="drug-details">
+            <div class="drug-detail-item"><div class="drug-detail-label">Diluent</div><div class="drug-detail-value">D5W 100 mL</div></div>
+            <div class="drug-detail-item"><div class="drug-detail-label">Total Volume</div><div class="drug-detail-value">155 mL</div></div>
+            <div class="drug-detail-item"><div class="drug-detail-label">Infusion</div><div class="drug-detail-value">IV over 2 hours</div></div>
+            <div class="drug-detail-item"><div class="drug-detail-label">Dose/m²</div><div class="drug-detail-value">~400 mg/m²</div></div>
+            <div class="drug-detail-item"><div class="drug-detail-label">Mixed</div><div class="drug-detail-value">9:55 · 08/07/2569</div></div>
+            <div class="drug-detail-item"><div class="drug-detail-label">Expiry</div><div class="drug-detail-value">24 hours</div></div>
+            <div class="drug-detail-item"><div class="drug-detail-label"><span class="en">Prepared by</span><span class="th">เตรียมโดย</span></div><div class="drug-detail-value"><span class="en">Dr. Nathanich Suriyaphan</span><span class="th">พญ.ณัฐนิช สุริยาพันธ์</span></div></div>
+            <div class="drug-detail-item"><div class="drug-detail-label">Storage</div><div class="drug-detail-value"><span class="en">Refrigerate</span><span class="th">เก็บในตู้เย็น</span></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="drug-card infusing">
+        <div class="drug-header">
+          <div><div class="drug-name">5-FU (Fluorouracil)</div><div class="small muted" style="margin-top: 4px; font-size: 12px;"><span class="en">⚠️ High Alert Drug · Irritant · Do NOT refrigerate</span><span class="th">⚠️ High Alert Drug · Irritant · ห้ามแช่เย็น</span></div></div>
+          <div class="drug-dose">1660 mg (33.2 mL)</div>
+        </div>
+        <div class="drug-details">
+          <div class="drug-detail-item"><div class="drug-detail-label">Diluent</div><div class="drug-detail-value">NSS 1000 mL</div></div>
+          <div class="drug-detail-item"><div class="drug-detail-label">Total Volume</div><div class="drug-detail-value">1033.2 mL</div></div>
+          <div class="drug-detail-item"><div class="drug-detail-label">Infusion</div><div class="drug-detail-value">IV over 23 hours</div></div>
+          <div class="drug-detail-item"><div class="drug-detail-label">Dose/m²</div><div class="drug-detail-value">~1200 mg/m²</div></div>
+          <div class="drug-detail-item"><div class="drug-detail-label">Mixed</div><div class="drug-detail-value">9:55 · 08/07/2569</div></div>
+          <div class="drug-detail-item"><div class="drug-detail-label">Expiry</div><div class="drug-detail-value">72 hours</div></div>
+          <div class="drug-detail-item"><div class="drug-detail-label"><span class="en">Prepared by</span><span class="th">เตรียมโดย</span></div><div class="drug-detail-value"><span class="en">Dr. Nathanich Suriyaphan</span><span class="th">พญ.ณัฐนิช สุริยาพันธ์</span></div></div>
+          <div class="drug-detail-item"><div class="drug-detail-label">Storage</div><div class="drug-detail-value" style="color: var(--amber);"><span class="en">Do NOT refrigerate</span><span class="th">ห้ามแช่เย็น · Room temp</span></div></div>
+        </div>
+      </div>
+
+      <div class="alert infusing mt-2">
+        <div class="alert-icon">⏱️</div>
+        <div class="alert-content">
+          <div class="alert-title"><span class="en">5-FU Continuous Infusion Running</span><span class="th">5-FU กำลังให้ต่อเนื่อง · Continuous Infusion Running</span></div>
+          <div class="alert-desc"><span class="en">5-FU 1660 mg in Normal Saline 0.9% 1000 mL (total 1033.2 mL) continuous IV infusion over 23 hours · Started 9:55 AM · Will finish ~8:55 AM tomorrow (9 Jul) · <strong>Note:</strong> 5-FU uses NSS as diluent (unlike Oxaliplatin which uses D5W) · High Alert Drug · Do NOT refrigerate (Irritant)</span><span class="th">5-FU 1660 mg ใน Normal Saline 0.9% 1000 mL (รวม 1033.2 mL) ให้ทาง IV ต่อเนื่อง 23 ชั่วโมง · เริ่ม 9:55 น. · จะเสร็จประมาณ 8:55 น. วันพรุ่งนี้ (9 ก.ค.) · <strong>ข้อควรระวัง:</strong> 5-FU ใช้ NSS เป็นตัวทำละลาย (ต่างจาก Oxaliplatin ที่ใช้ D5W) · เป็น High Alert Drug · ห้ามแช่เย็น (Irritant)</span></div>
+        </div>
+      </div>
+
+      <div class="alert info mt-2">
+        <div class="alert-icon">💡</div>
+        <div class="alert-content">
+          <div class="alert-title"><span class="en">Why does 5-FU use NSS but Oxaliplatin uses D5W?</span><span class="th">ทำไม 5-FU ใช้ NSS แต่ Oxaliplatin ใช้ D5W?</span></div>
+          <div class="alert-desc"><span class="en"><strong>Oxaliplatin</strong> is unstable in chloride-containing solutions (like NSS) and degrades rapidly → must use D5W only · <strong>5-FU</strong> is stable in both NSS and D5W → NSS is fine · This is why the Oxaliplatin label warns "Do NOT mix/flush with NSS" but 5-FU can use NSS normally.</span><span class="th"><strong>Oxaliplatin</strong> ไม่เสถียรในสารละลายที่มีคลอไรด์ (เช่น NSS) จะสลายตัวเร็ว → ต้องใช้ D5W เท่านั้น · <strong>5-FU</strong> เสถียรในทั้ง NSS และ D5W → ใช้ NSS ได้ · นี่คือเหตุผลที่ฉลาก Oxaliplatin เขียนว่า "ห้ามผสม/ไล่สายด้วย NSS" แต่ 5-FU ใช้ NSS ได้ปกติ</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card mt-3">
+      <div class="card-header">
+        <div>
+          <div class="card-title"><span class="icon">🔄</span><span><span class="en">Regimen Change</span><span class="th">เปลี่ยนสูตรเคมีบำบัด</span></span></div>
+          <div class="card-subtitle"><span class="en">23 Jun 2026 · Due to severe diarrhea after Cycle 1</span><span class="th">23 มิ.ย. 2569 · เนื่องจากถ่ายเหลวรุนแรงหลัง Cycle 1</span></div>
+        </div>
+        <span class="tag warning"><span class="en">Latest Update</span><span class="th">อัปเดตล่าสุด</span></span>
+      </div>
+      <div class="regimen-compare">
+        <div class="regimen-card stopped">
+          <span class="regimen-badge"><span class="en">Stopped</span><span class="th">หยุดใช้</span></span>
+          <div class="regimen-name">XELOX</div>
+          <div class="regimen-sub"><span class="en">Cycle 1 only · 15 Jun 2026</span><span class="th">Cycle 1 เท่านั้น · 15 มิ.ย. 2569</span></div>
+          <div class="regimen-drugs"><span class="drug-tag">Oxaliplatin 180 mg IV</span><span class="drug-tag">Capecitabine (oral)</span></div>
+          <div class="regimen-info"><strong><span class="en">Reason stopped:</span><span class="th">เหตุผลที่หยุด:</span></strong><span class="en"> Capecitabine (oral) caused severe diarrhea 6×/day in a patient without a colon</span><span class="th"> Capecitabine (ยากิน) ทำให้ถ่ายเหลวรุนแรง 6 ครั้ง/วัน ในผู้ป่วยที่ไม่มีลำไส้ใหญ่</span><br><strong><span class="en">Frequency:</span><span class="th">ความถี่:</span></strong><span class="en"> Every 3 weeks</span><span class="th"> ทุก 3 สัปดาห์</span></div>
+        </div>
+        <div class="regimen-card active">
+          <span class="regimen-badge"><span class="en">✓ Current</span><span class="th">✓ ใช้ปัจจุบัน</span></span>
+          <div class="regimen-name">mFOLFOX6</div>
+          <div class="regimen-sub"><span class="en">Cycle 2+ · Started 8 Jul 2026</span><span class="th">Cycle 2+ · เริ่ม 8 ก.ค. 2569</span></div>
+          <div class="regimen-drugs"><span class="drug-tag">Oxaliplatin 110 mg IV</span><span class="drug-tag">Leucovorin 550 mg IV</span><span class="drug-tag">5-FU 1660 mg IV</span></div>
+          <div class="regimen-info"><strong><span class="en">Reason for switch:</span><span class="th">เหตุผลที่เปลี่ยน:</span></strong><span class="en"> All IV, no oral drug → better diarrhea control</span><span class="th"> ฉีดทั้งหมด ไม่มี ยากิน → ควบคุมอาการถ่ายเหลวได้ดีกว่า</span><br><strong><span class="en">Frequency:</span><span class="th">ความถี่:</span></strong><span class="en"> Every 2 weeks · ~23 hours per cycle (5-FU continuous)</span><span class="th"> ทุก 2 สัปดาห์ · ~23 ชั่วโมงต่อรอบ (5-FU continuous)</span><br><strong><span class="en">Efficacy:</span><span class="th">ประสิทธิภาพ:</span></strong><span class="en"> Equal to XELOX · No compromise in efficacy</span><span class="th"> เท่า XELOX · ไม่ลดประสิทธิภาพการรักษา</span></div>
+        </div>
+      </div>
+      <div class="alert info mt-3">
+        <div class="alert-icon">💡</div>
+        <div class="alert-content">
+          <div class="alert-title"><span class="en">Why the change?</span><span class="th">ทำไมจึงเปลี่ยน · Why the change?</span></div>
+          <div class="alert-desc"><span class="en">XELOX and mFOLFOX6 are equally effective for colon cancer — both use oxaliplatin plus a fluoropyrimidine. The switch <strong>does not reduce treatment efficacy</strong>; it only changes the delivery method (oral capecitabine → IV 5-FU) to better control diarrhea worsened by the absence of a colon.</span><span class="th">XELOX และ mFOLFOX6 มีประสิทธิภาพเท่ากันในการรักษามะเร็งลำไส้ — ทั้งคู่ใช้ oxaliplatin ร่วมกับยากลุ่ม fluoropyrimidine การเปลี่ยนนี้<strong>ไม่ลดประสิทธิภาพการรักษา</strong> เพียงเปลี่ยนวิธีให้ยา (capecitabine ชนิดกิน → 5-FU ชนิดฉีด) เพื่อควบคุมอาการถ่ายเหลวที่รุนแรงขึ้นจากการไม่มีลำไส้ใหญ่</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid grid-2 mt-3">
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title"><span class="icon">💊</span><span><span class="en">Cycle 1 · What Was Given</span><span class="th">Cycle 1 · สิ่งที่ได้รับ</span></span></div>
+            <div class="card-subtitle"><span class="en">15 Jun 2026 · XELOX regimen (since changed)</span><span class="th">15 มิ.ย. 2569 · XELOX regimen (since changed)</span></div>
+          </div>
+          <span class="tag success">✓ Completed</span>
+        </div>
+        <div class="kv-row"><span class="k"><span class="en">Weight / BSA</span><span class="th">น้ำหนัก / BSA</span></span><span class="v mono">46.6 kg · 1.43 m²</span></div>
+        <div class="kv-row"><span class="k"><span class="en">Height</span><span class="th">ความสูง</span></span><span class="v mono">160 cm</span></div>
+        <div class="divider"></div>
+        <div class="drug-card">
+          <div class="drug-header"><div class="drug-name">Oxaliplatin</div><div class="drug-dose">180 mg · 130 mg/m²</div></div>
+          <div class="drug-details">
+            <div class="drug-detail-item"><div class="drug-detail-label"><span class="en">Dose</span><span class="th">ปริมาณ</span></div><div class="drug-detail-value">180 mg</div></div>
+            <div class="drug-detail-item"><div class="drug-detail-label"><span class="en">Solution volume</span><span class="th">ปริมาณสารละลาย</span></div><div class="drug-detail-value">36 ml</div></div>
+            <div class="drug-detail-item"><div class="drug-detail-label">Brand</div><div class="drug-detail-value">OXITAN</div></div>
+            <div class="drug-detail-item"><div class="drug-detail-label">Diluent</div><div class="drug-detail-value">D-5-W 250 ml</div></div>
+            <div class="drug-detail-item"><div class="drug-detail-label">Total Volume</div><div class="drug-detail-value">286 ml</div></div>
+            <div class="drug-detail-item"><div class="drug-detail-label">IV Drip Time</div><div class="drug-detail-value">2 hours</div></div>
+            <div class="drug-detail-item"><div class="drug-detail-label">Pump Rate</div><div class="drug-detail-value">145 mL/h</div></div>
+            <div class="drug-detail-item"><div class="drug-detail-label">Pump Model</div><div class="drug-detail-value">Terumo TE-LF630</div></div>
+            <div class="drug-detail-item"><div class="drug-detail-label">Bag ID</div><div class="drug-detail-value">C1 · #6922163445</div></div>
+          </div>
+        </div>
+        <div class="small muted"><span class="en">💡 XELOX = Oxaliplatin (IV today) + Capecitabine (oral tablets at home twice daily for 14 days). 7-day rest follows = one 21-day cycle.</span><span class="th">💡 XELOX = Oxaliplatin (ฉีด IV วันนี้) + Capecitabine (ยาเม็ดทานที่บ้าน วันละ 2 ครั้ง นาน 14 วัน) · Oxaliplatin given IV + Capecitabine tablets at home twice daily for 14 days, then 7 days rest = one 21-day cycle.</span></div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title"><span class="icon">💉</span><span><span class="en">Premedications</span><span class="th">ยาก่อนเคมี · Premedications</span></span></div>
+            <div class="card-subtitle"><span class="en">Given 30 min before chemo · 8 Jul 2026</span><span class="th">ให้ 30 นาทีก่อนเคมีบำบัด · 8 ก.ค. 2569</span></div>
+          </div>
+        </div>
+        <div class="premed-list">
+          <div class="premed-item"><div><div class="premed-name">Ondansetron</div><div class="premed-purpose"><span class="en">Anti-emetic</span><span class="th">กันคลื่นไส้</span></div></div><div class="premed-dose">8 mg IV</div></div>
+          <div class="premed-item"><div><div class="premed-name">Dexamethasone</div><div class="premed-purpose"><span class="en">Steroid</span><span class="th">สเตียรอยด์</span></div></div><div class="premed-dose">10 mg IV</div></div>
+          <div class="premed-item"><div><div class="premed-name">Diphenhydramine</div><div class="premed-purpose"><span class="en">Anti-histamine</span><span class="th">กันแพ้</span></div></div><div class="premed-dose">50 mg PO</div></div>
+          <div class="premed-item"><div><div class="premed-name">Famotidine</div><div class="premed-purpose"><span class="en">H2 blocker</span><span class="th">ลดกรด · H2 blocker</span></div></div><div class="premed-dose">20 mg PO</div></div>
+          <div class="premed-item"><div><div class="premed-name">Olanzapine</div><div class="premed-purpose"><span class="en">Anti-emetic</span><span class="th">กันคลื่นไส้</span></div></div><div class="premed-dose">5 mg PO</div></div>
+          <div class="premed-item"><div><div class="premed-name">Vitamin B12</div><div class="premed-purpose"><span class="en">Supplement</span><span class="th">เสริมวิตามิน</span></div></div><div class="premed-dose">1,000 mcg IM</div></div>
+          <div class="premed-item"><div><div class="premed-name">NaCl + KCl + MgSO4</div><div class="premed-purpose"><span class="en">Electrolytes</span><span class="th">เกลือแร่</span></div></div><div class="premed-dose">IV drip</div></div>
+          <div class="premed-item"><div><div class="premed-name">Atropine</div><div class="premed-purpose"><span class="en">Abdominal pain (prn)</span><span class="th">แก้ปวดท้อง (prn)</span></div></div><div class="premed-dose">0.6 mg IV prn</div></div>
+          <div class="premed-item"><div><div class="premed-name">CPM</div><div class="premed-purpose"><span class="en">Anti-emetic</span><span class="th">ป้องกันคลื่นไส้</span></div></div><div class="premed-dose">10 mg IV</div></div>
+        </div>
+        <div class="divider"></div>
+        <div class="small muted"><span class="en">📋 CT Scan Surveillance (Ordered 15 Jun 2026)</span><span class="th">📋 CT Scan Surveillance (Ordered 15 Jun 2026)</span></div>
+        <div class="kv-row mt-1"><span class="k">🫁 CT Chest</span><span class="v" style="color: var(--teal)">✓ ordered</span></div>
+        <div class="kv-row"><span class="k">🩻 CT Whole Abdomen</span><span class="v" style="color: var(--teal)">✓ ordered</span></div>
+        <div class="small dim mt-1"><span class="en">Clinical history on form: CA colon, S/P surgery, FAP / Cowden's syndrome — surveillance imaging to confirm no metastasis. Note: Cowden's syndrome now listed alongside FAP, pending genetic results.</span><span class="th">Clinical history on form: CA colon, S/P surgery, FAP / Cowden's syndrome — surveillance imaging to confirm no metastasis. หมายเหตุ: Cowden's syndrome ถูกเพิ่มเข้าในการพิจารณาทางพันธุกรรมร่วมกับ FAP รอผลตรวจพันธุกรรม</span></div>
+      </div>
+    </div>
+
+    <div class="grid grid-2 mt-3">
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title"><span class="icon">💧</span><span><span class="en">Interim Event</span><span class="th">เหตุการณ์ระหว่างรอบ</span></span></div>
+            <div class="card-subtitle"><span class="en">20 Jun 2026 · 17:00 · Day 5 post-Cycle 1</span><span class="th">20 มิ.ย. 2569 · 17:00 · Day 5 post-Cycle 1</span></div>
+          </div>
+          <span class="tag warning"><span class="en">Electrolyte Imbalance</span><span class="th">เกลือแร่ผิดปกติ</span></span>
+        </div>
+        <div class="alert warning">
+          <div class="alert-icon">⚠</div>
+          <div class="alert-content">
+            <div class="alert-title"><span class="en">IV Hydration · Electrolyte Replacement</span><span class="th">IV Hydration · ให้น้ำเกลือแก้เกลือแร่ผิดปกติ</span></div>
+            <div class="alert-desc"><span class="en">Dizziness & "low blood" feeling from electrolyte imbalance after 3 days of watery (high-output) stoma output.</span><span class="th">เวียนหัว อ่อนเพลีย "เลือดต่ำ" จากภาวะเกลือแร่ผิดปกติ หลังถ่ายออกทางรูเปิดลำไส้เป็นน้ำต่อเนื่อง 3 วัน</span></div>
+          </div>
+        </div>
+        <div class="drug-card">
+          <div class="drug-header"><div class="drug-name">D5-½S 1,000 ml</div><div class="drug-dose">IV drip</div></div>
+          <div class="drug-details">
+            <div class="drug-detail-item"><div class="drug-detail-label">Dextrose</div><div class="drug-detail-value">5 g/100ml</div></div>
+            <div class="drug-detail-item"><div class="drug-detail-label">Sodium</div><div class="drug-detail-value">77 mEq/L</div></div>
+            <div class="drug-detail-item"><div class="drug-detail-label">Chloride</div><div class="drug-detail-value">77 mEq/L</div></div>
+            <div class="drug-detail-item"><div class="drug-detail-label">Osmolarity</div><div class="drug-detail-value">406 mOsm/L</div></div>
+          </div>
+        </div>
+        <div class="alert info mt-3">
+          <div class="alert-icon">💡</div>
+          <div class="alert-content">
+            <div class="alert-title"><span class="en">Why this happens</span><span class="th">ทำไมเกิดขึ้น · Why this happens</span></div>
+            <div class="alert-desc"><span class="en">After total colectomy, there's no colon to reabsorb water and salts, so fluid/electrolytes are lost quickly — especially during chemo. <strong>This is common and manageable.</strong> Coming in promptly for IV fluids was the right call.</span><span class="th">หลังตัดลำไส้ใหญ่ออกทั้งหมด ร่างกายไม่มีลำไส้ใหญ่ดูดซับน้ำและเกลือแร่ ทำให้สูญเสียน้ำ-เกลือแร่ได้เร็ว โดยเฉพาะช่วงเคมีบำบัด — <strong>เป็นภาวะที่พบบ่อยและจัดการได้</strong> การมาให้น้ำเกลือทันทีคือการตัดสินใจที่ถูกต้อง</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title"><span class="icon">⚠️</span><span><span class="en">Watch List</span><span class="th">สิ่งที่ต้องเฝ้าระวัง</span></span></div>
+            <div class="card-subtitle"><span class="en">Precautions between chemo cycles</span><span class="th">ข้อควรปฏิบัติระหว่างรอบเคมี</span></div>
+          </div>
+        </div>
+        <div class="watchlist">
+          <div class="watch-item"><div class="watch-icon">1</div><div><strong><span class="en">Stoma output volume</span><span class="th">ปริมาณของเหลวจากรูเปิดลำไส้</span></strong><div class="small dim"><span class="en">&gt;1,000–1,500 ml/day = needs attention</span><span class="th">&gt;1,000–1,500 ml/วัน = ต้องดูแล</span></div></div></div>
+          <div class="watch-item"><div class="watch-icon">2</div><div><strong><span class="en">Dehydration signs</span><span class="th">สัญญาณขาดน้ำ</span></strong><div class="small dim"><span class="en">Dizziness, dark urine, dry mouth, palpitations</span><span class="th">เวียนหัว ปัสสาวะเข้ม ปากแห้ง ใจสั่น</span></div></div></div>
+          <div class="watch-item"><div class="watch-icon">3</div><div><strong><span class="en">Oral rehydration solution (ORS) between visits</span><span class="th">ดื่มผงเกลือแร่ (ORS) ระหว่างวัน</span></strong></div></div>
+          <div class="watch-item"><div class="watch-icon">4</div><div><strong><span class="en">Electrolytes checked at next appointment</span><span class="th">ตรวจเกลือแร่ในนัดถัดไป</span></strong></div></div>
+          <div class="watch-item"><div class="watch-icon">5</div><div><strong><span class="en">Avoid cold (Oxaliplatin)</span><span class="th">หลีกเลี่ยงความเย็น (Oxaliplatin)</span></strong><div class="small dim"><span class="en">Cold drinks/air → peripheral neuropathy</span><span class="th">เครื่องดื่มเย็น อากาศเย็น → ชาปลายมือเท้า</span></div></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LABS -->
+  <div class="section" id="labs">
+    <div class="section-header">
+      <div>
+        <h2><span class="en">Laboratory Results</span><span class="th">ผลเลือด</span></h2>
+        <div class="section-sub"><span class="en">Latest update 2 Jul 2026 · Pre-Cycle 2 assessment</span><span class="th">อัปเดตล่าสุด 2 ก.ค. 2569 · Pre-Cycle 2 assessment</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <div class="card-title"><span class="icon">📊</span><span><span class="en">Key Marker Trends</span><span class="th">แนวโน้มค่าสำคัญ</span></span></div>
+          <div class="card-subtitle"><span class="en">3 time points: 15 Jun → 19 Jun → 2 Jul · Cleared for chemo ✓</span><span class="th">3 ครั้ง: 15 มิ.ย. → 19 มิ.ย. → 2 ก.ค. · ผลผ่านเกณฑ์ให้ทำเคมีต่อได้ ✓</span></div>
+        </div>
+        <span class="tag success"><span class="en">Cleared for Chemo</span><span class="th">ผ่านเกณฑ์เคมี</span></span>
+      </div>
+      <div class="grid grid-2">
+        <div class="alert success">
+          <div class="alert-icon">✓</div>
+          <div class="alert-content">
+            <div class="alert-title"><span class="en">Improvements</span><span class="th">สรุปผลดี · Improvements</span></div>
+            <div class="alert-desc"><span class="en">• Liver enzymes normalized (AST 28, ALT 25 — down from 67/55)<br>• Kidney excellent (eGFR 125)<br>• Electrolytes recovered (Na 137.5)<br>• MCV normalized (82.8 — up from 74)<br>• ANC 3.0 safe for chemo</span><span class="th">• เอนไซม์ตับปกติ (AST 28, ALT 25 — ลดจาก 67/55)<br>• ไตดีเยี่ยม (eGFR 125)<br>• เกลือแร่กลับมาปกติ (Na 137.5)<br>• MCV กลับมาปกติ (82.8 — ขึ้นจาก 74)<br>• ANC 3.0 ปลอดภัยสำหรับเคมี</span></div>
+          </div>
+        </div>
+        <div class="alert warning">
+          <div class="alert-icon">⚠</div>
+          <div class="alert-content">
+            <div class="alert-title"><span class="en">Watch</span><span class="th">เฝ้าระวัง · Watch</span></div>
+            <div class="alert-desc"><span class="en">• Mild anemia persists (Hb 10.6, Hct 33.3) — stable, not worsening; common during chemo<br>• High RDW (21.3) + abnormal RBC morphology = recovering iron-deficiency anemia<br>• Mildly high globulin (3.1)</span><span class="th">• ซีดเล็กน้อยยังคงอยู่ (Hb 10.6, Hct 33.3) — คงที่ ไม่แย่ลง พบบ่อยระหว่างเคมี<br>• RDW สูง (21.3) + RBC morphology ผิดปกติ = ภาวะซีดจากขาดธาตุเหล็กที่กำลังฟื้นตัว<br>• Globulin สูงเล็กน้อย (3.1)</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <div class="lab-table-wrapper">
+        <table class="lab-trend-table">
+          <thead><tr><th><span class="en">Test</span><span class="th">การตรวจ</span></th><th><span class="en">15 Jun</span><span class="th">15 มิ.ย.</span></th><th><span class="en">19 Jun</span><span class="th">19 มิ.ย.</span></th><th><span class="en">2 Jul (latest)</span><span class="th">2 ก.ค. (ล่าสุด)</span></th><th><span class="en">Trend</span><span class="th">แนวโน้ม</span></th><th><span class="en">Status</span><span class="th">สถานะ</span></th></tr></thead>
+          <tbody>
+            <tr><td class="test-name"><span class="en">WBC</span><span class="th">WBC · เม็ดเลือดขาว</span></td><td>5.8</td><td>6.2</td><td>6.5</td><td class="trend-stable">→</td><td class="status-good"><span class="en">✓ Normal</span><span class="th">✓ ปกติ</span></td></tr>
+            <tr><td class="test-name"><span class="en">ANC</span><span class="th">ANC · เซลล์ภูมิคุ้มกัน</span></td><td>2.8</td><td>3.1</td><td>3.0</td><td class="trend-stable">→</td><td class="status-good"><span class="en">✓ Safe</span><span class="th">✓ ปลอดภัย</span></td></tr>
+            <tr><td class="test-name"><span class="en">Hb</span><span class="th">Hb · ฮีโมโกลบิน</span></td><td>10.2</td><td>10.4</td><td>10.6</td><td class="trend-up">↑</td><td class="status-warn"><span class="en">⚠ Mild anemia</span><span class="th">⚠ ซีดเล็กน้อย</span></td></tr>
+            <tr><td class="test-name">Hct</td><td>32.1</td><td>32.8</td><td>33.3</td><td class="trend-up">↑</td><td class="status-warn">⚠</td></tr>
+            <tr><td class="test-name">MCV</td><td>74</td><td>78</td><td>82.8</td><td class="trend-up">↑</td><td class="status-good"><span class="en">✓ Normalized</span><span class="th">✓ กลับสู่ปกติ</span></td></tr>
+            <tr><td class="test-name">RDW</td><td>22.1</td><td>21.8</td><td>21.3</td><td class="trend-down">↓</td><td class="status-warn">⚠</td></tr>
+            <tr><td class="test-name"><span class="en">Platelet</span><span class="th">Platelet · เกล็ดเลือด</span></td><td>420</td><td>445</td><td>460</td><td class="trend-up">↑</td><td class="status-warn"><span class="en">⚠ Reactive</span><span class="th">⚠ Reactive</span></td></tr>
+            <tr><td class="test-name">AST</td><td>67</td><td>45</td><td>28</td><td class="trend-down">↓↓</td><td class="status-good"><span class="en">✓ Normal</span><span class="th">✓ ปกติ</span></td></tr>
+            <tr><td class="test-name">ALT</td><td>55</td><td>38</td><td>25</td><td class="trend-down">↓↓</td><td class="status-good">✓</td></tr>
+            <tr><td class="test-name"><span class="en">Creatinine</span><span class="th">Creatinine · ไต</span></td><td>0.8</td><td>0.8</td><td>0.8</td><td class="trend-stable">→</td><td class="status-good">✓</td></tr>
+            <tr><td class="test-name">eGFR</td><td>118</td><td>122</td><td>125</td><td class="trend-up">↑</td><td class="status-good">✓</td></tr>
+            <tr><td class="test-name"><span class="en">Sodium</span><span class="th">Sodium · โซเดียม</span></td><td>132</td><td>135</td><td>137.5</td><td class="trend-up">↑</td><td class="status-good">✓</td></tr>
+            <tr><td class="test-name">Globulin</td><td>2.9</td><td>3.0</td><td>3.1</td><td class="trend-up">↑</td><td class="status-warn">⚠</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="grid grid-2 mt-3">
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title"><span class="icon">🩸</span><span><span class="en">Baseline CBC · 2 Apr 2026</span><span class="th">Baseline CBC · 2 เม.ย. 2569</span></span></div>
+            <div class="card-subtitle"><span class="en">Pre-operative · Sirindhorn Hospital</span><span class="th">ก่อนผ่าตัด · Sirindhorn Hospital</span></div>
+          </div>
+        </div>
+        <div class="lab-table-wrapper">
+          <table class="lab-trend-table">
+            <thead><tr><th><span class="en">Test</span><span class="th">การตรวจ</span></th><th><span class="en">Result</span><span class="th">ผล</span></th><th>Ref</th><th><span class="en">Status</span><span class="th">สถานะ</span></th></tr></thead>
+            <tbody>
+              <tr><td class="test-name">WBC</td><td class="mono">5.8</td><td class="mono dim">4.0–11.0</td><td class="status-good">✓</td></tr>
+              <tr><td class="test-name">Hb</td><td class="mono">9.2</td><td class="mono dim">12.0–16.0</td><td class="status-bad">↓</td></tr>
+              <tr><td class="test-name">Hct</td><td class="mono">29.5</td><td class="mono dim">36–46</td><td class="status-bad">↓</td></tr>
+              <tr><td class="test-name">MCV</td><td class="mono">72</td><td class="mono dim">80–100</td><td class="status-bad">↓</td></tr>
+              <tr><td class="test-name">RDW</td><td class="mono">23.5</td><td class="mono dim">11.5–14.5</td><td class="status-bad">↑</td></tr>
+              <tr><td class="test-name">Platelet</td><td class="mono">485</td><td class="mono dim">150–400</td><td class="status-warn">↑</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="alert info mt-3">
+          <div class="alert-icon">💡</div>
+          <div class="alert-content">
+            <div class="alert-title"><span class="en">Summary</span><span class="th">สรุป · Summary</span></div>
+            <div class="alert-desc"><span class="en">Low Hb + Low MCV + High RDW + High Platelets → <strong>Iron Deficiency Anemia + Reactive Thrombocytosis</strong> — common in colorectal cancer with chronic blood loss · WBC & ANC normal — immune function intact ✓</span><span class="th">Hb ต่ำ + MCV ต่ำ + RDW สูง + เกล็ดเลือดสูง → <strong>Iron Deficiency Anemia + Reactive Thrombocytosis</strong> — พบบ่อยในมะเร็งลำไส้ที่มีเลือดออกเรื้อรัง · WBC & ANC normal — immune function intact ✓</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title"><span class="icon">🔴</span><span><span class="en">RBC Morphology</span><span class="th">RBC Morphology</span></span></div>
+            <div class="card-subtitle"><span class="en">Abnormal ⚠️</span><span class="th">พบความผิดปกติ · Abnormal ⚠️</span></div>
+          </div>
+          <span class="tag warning">Abnormal</span>
+        </div>
+        <div class="rbc-grid">
+          <div class="rbc-item"><div class="rbc-name">Anisocytosis</div><div class="rbc-desc"><span class="en">Uneven RBC sizes</span><span class="th">เม็ดเลือดแดงขนาดไม่สม่ำเสมอ</span></div></div>
+          <div class="rbc-item"><div class="rbc-name">Microcyte</div><div class="rbc-desc"><span class="en">Abnormally small RBCs</span><span class="th">เม็ดเลือดแดงขนาดเล็กผิดปกติ</span></div></div>
+          <div class="rbc-item"><div class="rbc-name">Ovalocyte</div><div class="rbc-desc"><span class="en">Oval-shaped RBCs</span><span class="th">เม็ดเลือดแดงรูปรี</span></div></div>
+        </div>
+        <div class="alert info mt-3">
+          <div class="alert-icon">💡</div>
+          <div class="alert-content">
+            <div class="alert-title"><span class="en">Interpretation</span><span class="th">การแปลผล · Interpretation</span></div>
+            <div class="alert-desc"><span class="en">Low Hb + Low MCV + High RDW + abnormal morphology = <strong>Iron Deficiency Anemia from chronic cancer-related blood loss</strong></span><span class="th">Hb ต่ำ + MCV ต่ำ + RDW สูง + ลักษณะผิดปกติ = <strong>Iron Deficiency Anemia จากเลือดออกเรื้อรังจากมะเร็ง</strong></span></div>
+          </div>
+        </div>
+        <div class="divider"></div>
+        <div class="kv-row"><span class="k">🧬 Anti HIV (Strip Test)</span><span class="v" style="color: var(--text-tertiary)"><span class="en">⏳ Pending · Standard pre-op screening</span><span class="th">⏳ รอผล · ตรวจตามมาตรฐานก่อนผ่าตัด</span></span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TIMELINE - REDESIGNED -->
+  <div class="section" id="timeline">
+    <div class="section-header">
+      <div>
+        <h2><span class="en">Treatment Timeline</span><span class="th">ไทม์ไลน์การรักษา</span></h2>
+        <div class="section-sub"><span class="en">Chronological events from diagnosis to present</span><span class="th">ลำดับเหตุการณ์ตั้งแต่เริ่มวินิจฉัยถึงปัจจุบัน</span></div>
+      </div>
+    </div>
+
+    <div class="card" style="padding: 20px;">
+      <div class="timeline">
+        <div class="timeline-item past">
+          <div class="timeline-date-cell">
+            <div class="timeline-date-main"><span class="en">24 Mar 2026</span><span class="th">24 มี.ค. 2569</span></div>
+            <div class="timeline-date-sub"><span class="en">Diagnosis</span><span class="th">วินิจฉัย</span></div>
+          </div>
+          <div class="timeline-content-cell">
+            <div class="timeline-title"><span class="en">🔍 Colonoscopy</span><span class="th">🔍 ส่องกล้องลำไส้ใหญ่ · Colonoscopy</span></div>
+            <div class="timeline-desc"><span class="en">Multiple polyps anal to descending colon · Ulcerative mass at 50 cm; biopsy taken</span><span class="th">พบติ่งเนื้อหลายจุดตั้งแต่ทวารหนักถึงลำไส้ส่วนลง · ก้อนที่ 50 ซม. กล้องผ่านไม่ได้ เก็บชิ้นเนื้อ</span></div>
+          </div>
+        </div>
+
+        <div class="timeline-item past">
+          <div class="timeline-date-cell">
+            <div class="timeline-date-main"><span class="en">2 Apr 2026</span><span class="th">2 เม.ย. 2569</span></div>
+            <div class="timeline-date-sub"><span class="en">Planning</span><span class="th">วางแผน</span></div>
+          </div>
+          <div class="timeline-content-cell">
+            <div class="timeline-title"><span class="en">📋 Follow-up & Surgical Planning</span><span class="th">📋 ติดตามผล + วางแผนผ่าตัด</span></div>
+            <div class="timeline-desc"><span class="en">FAP + Hepatic Flexure Cancer diagnosed · CT: no distant mets · CBC + Chemistry drawn</span><span class="th">วินิจฉัย FAP + Hepatic Flexure Cancer · CT ไม่พบแพร่กระจาย · เจาะเลือด CBC + Chemistry</span></div>
+          </div>
+        </div>
+
+        <div class="timeline-item past">
+          <div class="timeline-date-cell">
+            <div class="timeline-date-main"><span class="en">20 Apr 2026</span><span class="th">20 เม.ย. 2569</span></div>
+            <div class="timeline-date-sub"><span class="en">Admission</span><span class="th">รับตัว</span></div>
+          </div>
+          <div class="timeline-content-cell">
+            <div class="timeline-title"><span class="en">🏥 Hospital Admission · AN 6881-69</span><span class="th">🏥 รับตัวเข้าโรงพยาบาล · AN 6881-69</span></div>
+            <div class="timeline-desc"><span class="en">Pre-operative preparation</span><span class="th">เตรียมตัวก่อนผ่าตัด</span></div>
+          </div>
+        </div>
+
+        <div class="timeline-item past">
+          <div class="timeline-date-cell">
+            <div class="timeline-date-main"><span class="en">21 Apr 2026</span><span class="th">21 เม.ย. 2569</span></div>
+            <div class="timeline-date-sub"><span class="en">Surgery</span><span class="th">ผ่าตัด</span></div>
+          </div>
+          <div class="timeline-content-cell">
+            <div class="timeline-title">✅ Open Total Proctocolectomy + IPAA + Ileostomy</div>
+            <div class="timeline-desc"><span class="en">Full colon + 53 lymph nodes removed · 9/53 nodes positive · Clear margins (R0)</span><span class="th">นำลำไส้ใหญ่ทั้งหมด + ต่อมน้ำเหลือง 53 ต่อมออก · พบมะเร็ง 9/53 ต่อม · ขอบตัดสะอาด (R0)</span></div>
+          </div>
+        </div>
+
+        <div class="timeline-item past">
+          <div class="timeline-date-cell">
+            <div class="timeline-date-main"><span class="en">28 Apr 2026</span><span class="th">28 เม.ย. 2569</span></div>
+            <div class="timeline-date-sub"><span class="en">Discharge</span><span class="th">กลับบ้าน</span></div>
+          </div>
+          <div class="timeline-content-cell">
+            <div class="timeline-title"><span class="en">🏠 Hospital Discharge · 8 nights</span><span class="th">🏠 ออกจากโรงพยาบาล · 8 คืน</span></div>
+          </div>
+        </div>
+
+        <div class="timeline-item past">
+          <div class="timeline-date-cell">
+            <div class="timeline-date-main"><span class="en">12 May 2026</span><span class="th">12 พ.ค. 2569</span></div>
+            <div class="timeline-date-sub"><span class="en">Referral</span><span class="th">ส่งต่อ</span></div>
+          </div>
+          <div class="timeline-content-cell">
+            <div class="timeline-title"><span class="en">🔄 Referred to National Cancer Institute</span><span class="th">🔄 ส่งต่อสถาบันมะเร็งแห่งชาติ</span></div>
+            <div class="timeline-desc"><span class="en">Stage IIIC pT4N2M0 confirmed · Referring: Dr. Nathanich Suriyaphan · Referral #1690/69</span><span class="th">ยืนยัน Stage IIIC pT4N2M0 · แพทย์ผู้ส่ง: พญ.ณัฐนิช สุริยาพันธ์ · ใบส่งต่อเลขที่ 1690/69</span></div>
+          </div>
+        </div>
+
+        <div class="timeline-item past">
+          <div class="timeline-date-cell">
+            <div class="timeline-date-main"><span class="en">15 Jun 2026</span><span class="th">15 มิ.ย. 2569</span></div>
+            <div class="timeline-date-sub"><span class="en">Cycle 1</span><span class="th">รอบที่ 1</span></div>
+          </div>
+          <div class="timeline-content-cell">
+            <div class="timeline-title"><span class="en">💉 Chemotherapy Cycle 1 Started</span><span class="th">💉 เริ่มเคมีบำบัด Cycle 1</span></div>
+            <div class="timeline-desc"><span class="en">XELOX — Oxaliplatin 180 mg IV (130 mg/m²) + Capecitabine oral at home · Weight 46.6 kg · BSA 1.43 m² · CT Chest + Whole Abdomen ordered</span><span class="th">XELOX — Oxaliplatin 180 mg IV (130 mg/m²) + Capecitabine ทานที่บ้าน · น้ำหนัก 46.6 kg · BSA 1.43 m² · สั่งตรวจ CT Chest + Whole Abdomen</span></div>
+          </div>
+        </div>
+
+        <div class="timeline-item past">
+          <div class="timeline-date-cell">
+            <div class="timeline-date-main"><span class="en">20 Jun 2026</span><span class="th">20 มิ.ย. 2569</span></div>
+            <div class="timeline-date-sub">17:00</div>
+          </div>
+          <div class="timeline-content-cell">
+            <div class="timeline-title"><span class="en">💧 IV Hydration for Electrolyte Imbalance</span><span class="th">💧 ให้น้ำเกลือแก้เกลือแร่ผิดปกติ</span></div>
+            <div class="timeline-desc"><span class="en">Dizzy, "low blood" after 3 days high-output stoma · D5-½S 1,000 ml IV · Day 5 post-Cycle 1</span><span class="th">เวียนหัว "เลือดต่ำ" หลังถ่ายเป็นน้ำทางรูเปิดลำไส้ 3 วัน · D5-½S 1,000 ml IV · Day 5 post-Cycle 1</span></div>
+          </div>
+        </div>
+
+        <div class="timeline-item past">
+          <div class="timeline-date-cell">
+            <div class="timeline-date-main"><span class="en">23 Jun 2026</span><span class="th">23 มิ.ย. 2569</span></div>
+            <div class="timeline-date-sub"><span class="en">Regimen Change</span><span class="th">เปลี่ยนสูตร</span></div>
+          </div>
+          <div class="timeline-content-cell">
+            <div class="timeline-title"><span class="en">🔄 Chemotherapy Regimen Changed</span><span class="th">🔄 เปลี่ยนสูตรเคมีบำบัด</span></div>
+            <div class="timeline-desc"><span class="en">6× diarrhea, severe · Held Capecitabine · Switched to mFOLFOX6 · Weight 44 kg (BMI 17.19) · Facial osteoma noted (Cowden's?)</span><span class="th">ถ่ายเหลว 6 ครั้ง + รุนแรง · หยุด Capecitabine · เปลี่ยนเป็น mFOLFOX6 · น้ำหนัก 44 kg (BMI 17.19) · พบ osteoma ที่ใบหน้า (Cowden's?)</span></div>
+          </div>
+        </div>
+
+        <div class="timeline-item past">
+          <div class="timeline-date-cell">
+            <div class="timeline-date-main"><span class="en">2 Jul 2026</span><span class="th">2 ก.ค. 2569</span></div>
+            <div class="timeline-date-sub"><span class="en">Labs</span><span class="th">ตรวจเลือด</span></div>
+          </div>
+          <div class="timeline-content-cell">
+            <div class="timeline-title"><span class="en">🧪 Pre-Cycle 2 Blood Tests</span><span class="th">🧪 ตรวจเลือดก่อน Cycle 2</span></div>
+            <div class="timeline-desc"><span class="en">Cleared for chemo · AST/ALT normalized · Na recovered · MCV normalized</span><span class="th">ผลผ่านเกณฑ์ให้ทำเคมีต่อได้ · AST/ALT ปกติ · Na กลับสู่ปกติ · MCV กลับสู่ปกติ</span></div>
+          </div>
+        </div>
+
+        <!-- CURRENT EVENT - REFINED HIGHLIGHT -->
+        <div class="timeline-item current">
+          <div class="timeline-date-cell">
+            <div class="timeline-date-main"><span class="en">8 Jul 2026 · 9:55 AM</span><span class="th">8 ก.ค. 2569 · 9:55 น.</span></div>
+            <div class="timeline-date-sub"><span class="en">TODAY</span><span class="th">วันนี้</span></div>
+          </div>
+          <div class="timeline-content-cell">
+            <div class="timeline-title">
+              <span class="en">✨ Cycle 2 — mFOLFOX6</span><span class="th">✨ Cycle 2 — mFOLFOX6</span>
+              <span class="timeline-current-tag"><span class="en">IN PROGRESS</span><span class="th">กำลังดำเนินการ</span></span>
+            </div>
+            <div class="timeline-desc"><span class="en">5-FU 1660 mg continuous infusion over 23 hours · Oxaliplatin 110 mg + Leucovorin 550 mg completed · Chularat 3 International Hospital · High Alert Drug · Finishes ~8:55 AM tomorrow</span><span class="th">5-FU 1660 mg ให้ต่อเนื่อง 23 ชั่วโมง · Oxaliplatin 110 mg + Leucovorin 550 mg เสร็จแล้ว · โรงพยาบาลจุฬารัตน์ 3 อินเตอร์ · High Alert Drug · จะเสร็จ ~8:55 น. วันพรุ่งนี้</span></div>
+          </div>
+        </div>
+
+        <div class="timeline-item planned">
+          <div class="timeline-date-cell">
+            <div class="timeline-date-main"><span class="en">19 Jul 2026</span><span class="th">19 ก.ค. 2569</span></div>
+            <div class="timeline-date-sub"><span class="en">Appointment</span><span class="th">นัดหมาย</span></div>
+          </div>
+          <div class="timeline-content-cell">
+            <div class="timeline-title"><span class="en">📅 Chemotherapy Cycle 3 — mFOLFOX6</span><span class="th">📅 เคมีบำบัด Cycle 3 — mFOLFOX6</span></div>
+            <div class="timeline-desc"><span class="en">Every 2 weeks · Blood tests first · Bring appointment card + ID</span><span class="th">ทุก 2 สัปดาห์ · ตรวจเลือดก่อน · นำบัตรนัด + บัตรประชาชน</span></div>
+          </div>
+        </div>
+
+        <div class="timeline-item planned">
+          <div class="timeline-date-cell">
+            <div class="timeline-date-main"><span class="en">Jul 2026</span><span class="th">ก.ค. 2569</span></div>
+            <div class="timeline-date-sub"><span class="en">Planned</span><span class="th">แผน</span></div>
+          </div>
+          <div class="timeline-content-cell">
+            <div class="timeline-title"><span class="en">🧬 Genetic Test Results</span><span class="th">🧬 ผลการตรวจพันธุกรรม</span></div>
+            <div class="timeline-desc"><span class="en">FAP / AFAP / Lynch's / Cowden's — facial osteoma supports Cowden's</span><span class="th">FAP / AFAP / Lynch's / Cowden's — มี osteoma ที่ใบหน้าสนับสนุน Cowden's</span></div>
+          </div>
+        </div>
+
+        <div class="timeline-item planned">
+          <div class="timeline-date-cell">
+            <div class="timeline-date-main"><span class="en">Jul–Dec 2026</span><span class="th">ก.ค.–ธ.ค. 2569</span></div>
+            <div class="timeline-date-sub"><span class="en">Planned</span><span class="th">แผน</span></div>
+          </div>
+          <div class="timeline-content-cell">
+            <div class="timeline-title"><span class="en">💉 Chemotherapy Cycles 4–8 (mFOLFOX6)</span><span class="th">💉 เคมีบำบัด Cycle 4–8 (mFOLFOX6)</span></div>
+            <div class="timeline-desc"><span class="en">Every 2 weeks until complete (~6 months from start)</span><span class="th">ทุก 2 สัปดาห์จนครบ (~6 เดือนจากวันเริ่ม)</span></div>
+          </div>
+        </div>
+
+        <div class="timeline-item planned">
+          <div class="timeline-date-cell">
+            <div class="timeline-date-main"><span class="en">3–6 months post-op</span><span class="th">3–6 เดือนหลังผ่าตัด</span></div>
+            <div class="timeline-date-sub"><span class="en">Planned</span><span class="th">แผน</span></div>
+          </div>
+          <div class="timeline-content-cell">
+            <div class="timeline-title"><span class="en">🔧 Ileostomy Reversal Surgery</span><span class="th">🔧 ปิดรูเปิดลำไส้ชั่วคราว</span></div>
+            <div class="timeline-desc"><span class="en">Once healing confirmed</span><span class="th">เมื่อร่างกายฟื้นตัวสมบูรณ์</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- REPORTS -->
+  <div class="section" id="reports">
+    <div class="section-header">
+      <div>
+        <h2><span class="en">Full Pathology Reports</span><span class="th">รายงานพยาธิวิทยาฉบับเต็ม</span></h2>
+        <div class="section-sub"><span class="en">Detailed tissue examination and staining</span><span class="th">รายละเอียดการตรวจชิ้นเนื้อและการย้อมสี</span></div>
+      </div>
+    </div>
+
+    <div class="collapsible open">
+      <div class="collapsible-header" onclick="toggleCollapsible(this)"><div>🔬 REPORT 1 — Colonoscopy Biopsy · 24 Mar 2026 · Patho S2608175<div class="small dim" style="font-weight: 400; margin-top: 4px; font-size: 13px;"><span class="en">MD Lab Sahaclinic · Pre-surgery · First histological confirmation</span><span class="th">MD Lab Sahaclinic · ก่อนผ่าตัด · การยืนยันมะเร็งครั้งแรก</span></div></div><span class="chevron">▼</span></div>
+      <div class="collapsible-content"><div class="collapsible-inner">
+        <div class="alert danger"><div class="alert-icon">⚠</div><div class="alert-content"><div class="alert-title">CRITICAL VALUE</div><div class="alert-desc">Patho No. S2608175 · Lab No. A2603250125 · Collected 24/03/2026 · Reported 30/03/2026<br><span class="en">Physician: Dr. Masseerat Metula · Pathologist: Churaiorn Unhasuta M.D.</span><span class="th">แพทย์: พญ.มาสีรัตน์ เมตุลา · Pathologist: Churaiorn Unhasuta M.D.</span></div></div></div>
+        <div style="background: var(--bg-surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 14px;">
+          <div style="font-size: 15px; font-weight: 700; margin-bottom: 12px;"><span class="en">📋 Pathological Diagnosis (3 specimens)</span><span class="th">📋 ผลวินิจฉัย (3 specimens)</span></div>
+          <div style="font-size: 14px; color: var(--text-secondary); line-height: 1.6;">
+            <strong style="color: var(--text);">A · Sigmoid Colon — Mass at 50 cm from AV</strong><br>
+            <span class="tag danger">Adenocarcinoma, moderately differentiated</span>
+            <span class="tag warning"><span class="en">Angiolymphatic Invasion: None seen in biopsy</span><span class="th">Angiolymphatic Invasion: ไม่พบในชิ้นนี้</span></span>
+            <div class="small dim mt-1"><span class="en">📝 NOTE: "Prefer accurate tumor grading and cell subtyping to do in a large specimen" — LVI confirmed present in surgical specimen</span><span class="th">📝 NOTE: "Prefer accurate tumor grading and cell subtyping to do in a large specimen" — LVI ยืนยันพบในชิ้นผ่าตัด</span></div>
+            <div class="divider"></div>
+            <strong style="color: var(--text);">B · Sigmoid Colon — Polyp at 30 cm from AV</strong><br>
+            <span class="tag" style="background: rgba(122, 46, 122, 0.08); color: #7a2e7a; border-color: rgba(122, 46, 122, 0.25);">Tubular Adenoma · High Grade Dysplasia</span>
+            <span class="tag success"><span class="en">Malignancy: None</span><span class="th">Malignancy: ไม่พบ</span></span>
+            <div class="divider"></div>
+            <strong style="color: var(--text);">C · Rectum — Polyp at 10 cm from AV</strong><br>
+            <span class="tag" style="background: rgba(122, 46, 122, 0.08); color: #7a2e7a; border-color: rgba(122, 46, 122, 0.25);">Tubular Adenoma · High Grade Dysplasia</span>
+            <span class="tag success"><span class="en">Malignancy: None</span><span class="th">Malignancy: ไม่พบ</span></span>
+          </div>
+        </div>
+        <div class="alert info"><div class="alert-icon">💡</div><div class="alert-content"><div class="alert-title"><span class="en">Clinical Significance</span><span class="th">ความสำคัญทางคลินิก</span></div><div class="alert-desc"><span class="en">This biopsy was the first definitive cancer confirmation (24 Mar 2026), directly triggering surgical planning 3 weeks later. The LVI-negative result in this small biopsy was later upgraded to LVI-positive in the full surgical specimen — as the pathologist had anticipated.</span><span class="th">ผล biopsy นี้คือการยืนยันมะเร็งครั้งแรก (24/03/2026) ที่นำไปสู่การวางแผนผ่าตัด 3 สัปดาห์ถัดมา · ผล LVI-negative ในชิ้นเล็กๆ นี้ถูกอัพเกรดเป็น LVI-positive ในชิ้นผ่าตัดเต็ม — ตามที่พยาธิแพทย์ได้คาดการณ์ไว้</span></div></div></div>
+      </div></div>
+    </div>
+
+    <div class="collapsible open">
+      <div class="collapsible-header" onclick="toggleCollapsible(this)"><div>🔬 REPORT 2 — Surgical Colectomy · 21 Apr 2026 · Patho S2610824<div class="small dim" style="font-weight: 400; margin-top: 4px; font-size: 13px;"><span class="en">MD Lab Sahaclinic · ISO 15189 · Post-surgery</span><span class="th">MD Lab Sahaclinic · ISO 15189 · หลังผ่าตัด</span></div></div><span class="chevron">▼</span></div>
+      <div class="collapsible-content"><div class="collapsible-inner">
+        <div class="alert danger"><div class="alert-icon">⚠</div><div class="alert-content"><div class="alert-title">CRITICAL VALUE</div><div class="alert-desc">Patho No. S2610824 · Lab No. A2604220155 · Collected 21/04/2026 · Received 22/04/2026 · Reported 26/04/2026<br>Pathologist: Phanop Limlunjakorn M.D.</div></div></div>
+        <div style="background: var(--bg-surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 14px;">
+          <div style="font-size: 15px; font-weight: 700; margin-bottom: 12px;"><span class="en">📋 Pathological Diagnosis</span><span class="th">📋 ผลวินิจฉัยพยาธิวิทยา</span></div>
+          <div style="font-size: 14px; color: var(--text-secondary); line-height: 1.6;">
+            <strong style="color: var(--text);">A. RIGHT SIDE COLON — RIGHT HEMICOLECTOMY</strong>
+            <div class="kv-row"><span class="k">Diagnosis</span><span class="v" style="color: var(--burgundy)">Moderately differentiated adenocarcinoma</span></div>
+            <div class="kv-row"><span class="k">Tumor Size</span><span class="v mono">5.5 × 3.5 × 1.5 cm</span></div>
+            <div class="kv-row"><span class="k">Location</span><span class="v">Colon at Hepatic Flexure</span></div>
+            <div class="kv-row"><span class="k"><span class="en">Invasion Depth</span><span class="th">ความลึกการลุกลาม</span></span><span class="v" style="color: var(--burgundy)">Mucosa → Submucosa → Muscular → Serosa</span></div>
+            <div class="kv-row"><span class="k">Lymphovascular Invasion</span><span class="v" style="color: var(--amber)">⚠ Present</span></div>
+            <div class="kv-row"><span class="k"><span class="en">Lymph Nodes Positive</span><span class="th">ต่อมน้ำเหลืองพบมะเร็ง</span></span><span class="v" style="color: var(--burgundy)">⚠ 9 / 53</span></div>
+            <div class="kv-row"><span class="k">Proximal Margin</span><span class="v" style="color: var(--teal)">✓ Clear</span></div>
+            <div class="kv-row"><span class="k">Distal Margin</span><span class="v" style="color: var(--teal)">✓ Clear</span></div>
+            <div class="kv-row"><span class="k">Radial Margin</span><span class="v" style="color: var(--teal)">✓ Clear</span></div>
+            <div class="kv-row"><span class="k">Pericolonic Fat Deposit</span><span class="v" style="color: var(--teal)">✓ None</span></div>
+            <div class="divider"></div>
+            <strong style="color: var(--text);">B. PROXIMAL MARGIN</strong> <span class="tag success">✅</span><br><span class="en">Presence of benign colonic tissue · No carcinoma seen</span><span class="th">พบเนื้อเยื่อลำไส้ใหญ่ปกติ · ไม่พบมะเร็ง</span>
+            <div class="divider"></div>
+            <strong style="color: var(--text);">C. DISTAL MARGIN</strong> <span class="tag success">✅</span><br><span class="en">Presence of benign colonic tissue · No carcinoma seen</span><span class="th">พบเนื้อเยื่อลำไส้ใหญ่ปกติ · ไม่พบมะเร็ง</span>
+          </div>
+        </div>
+        <div class="alert info"><div class="alert-icon">💡</div><div class="alert-content"><div class="alert-title"><span class="en">Tissue Cassette Notes</span><span class="th">หมายเหตุเกี่ยวกับชิ้นเนื้อ</span></div><div class="alert-desc"><span class="en">Pink cassettes = main specimens A1–A27 (colon + tumor + lymph nodes) · Blue/white cassettes = margin specimens B1 and C1 · Some specimens are blue-inked for margin orientation identification. The 3 lighter blue cassettes (top row right) are the small margin specimens B1 and C1.</span><span class="th">Pink cassettes = ชิ้นเนื้อหลัก A1–A27 (colon + tumor + lymph nodes) · Blue/white cassettes = ชิ้นเนื้อจากขอบตัด B1 และ C1 · ชิ้นเนื้อบางชิ้นถูกย้อมสีน้ำเงิน (ink marking) เพื่อระบุขอบตัดด้านต่างๆ</span></div></div></div>
+      </div></div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <div><span class="en">Electronic Medical Record</span><span class="th">เวชระเบียนอิเล็กทรอนิกส์ · Electronic Medical Record</span></div>
+    <div><span class="en">Chatchamon Chen · HN 690780913 · Last updated 8 July 2026 · 5-FU infusing</span><span class="th">นางชัชชมนต์ เชน · HN 690780913 · อัปเดตล่าสุด 8 กรกฎาคม 2569 · 5-FU กำลังให้</span></div>
+    <div class="sources">Sources: Referral #1690/69 · Bill AN 6881-69 · Patho S2608175 (biopsy) · Patho S2610824 (colectomy) · XELOX Cycle 1 (15 Jun) · Regimen change to mFOLFOX6 (23 Jun) · Pre-Cycle 2 labs (2 Jul 2026) · <strong>Cycle 2 mFOLFOX6 in progress (8 Jul 2026 · Chularat 3 International · 5-FU 1660 mg in NSS infusing over 23 hrs)</strong></div>
+  </div>
+
+</div>
+
+<div class="detail-panel" id="detailPanel"><button class="close-btn" onclick="closeDetailPanel()">✕</button><div id="detailContent"></div></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+<script>
+function switchLang(lang) { document.body.classList.remove('lang-th', 'lang-en'); document.body.classList.add('lang-' + lang); document.querySelectorAll('.lang-btn').forEach(btn => { btn.classList.toggle('active', btn.dataset.lang === lang); }); document.documentElement.lang = lang; try { localStorage.setItem('preferred-lang', lang); } catch(e) {} }
+const stickyNav = document.getElementById('stickyNav');
+window.addEventListener('scroll', () => { stickyNav.classList.toggle('scrolled', window.scrollY > 10); });
+document.querySelectorAll('.nav-tab').forEach(tab => { tab.addEventListener('click', () => { const section = tab.dataset.section; const el = document.getElementById(section); if (el) { el.scrollIntoView({ behavior: 'smooth', block: 'start' }); document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active')); tab.classList.add('active'); } }); });
+const sections = document.querySelectorAll('.section'); const navTabs = document.querySelectorAll('.nav-tab');
+window.addEventListener('scroll', () => { let current = ''; sections.forEach(section => { if (window.scrollY >= section.offsetTop - 150) current = section.getAttribute('id'); }); navTabs.forEach(tab => { tab.classList.remove('active'); if (tab.dataset.section === current) tab.classList.add('active'); }); });
+function toggleCollapsible(header) { header.parentElement.classList.toggle('open'); }
+
+const chartPoints = document.querySelectorAll('.chart-point'); const tooltip = document.getElementById('chartTooltip'); const ttDate = document.getElementById('ttDate'); const ttValue = document.getElementById('ttValue'); const ttLabel = document.getElementById('ttLabel'); const chartContainer = document.getElementById('weightChart');
+chartPoints.forEach(point => {
+  point.addEventListener('mouseenter', (e) => { ttDate.textContent = point.dataset.date; ttValue.textContent = point.dataset.value + ' kg'; ttLabel.textContent = point.dataset.label; tooltip.classList.add('visible'); const rect = chartContainer.getBoundingClientRect(); const pointRect = point.getBoundingClientRect(); let left = pointRect.left - rect.left + 20; let top = pointRect.top - rect.top - 60; if (left + 140 > rect.width) left = pointRect.left - rect.left - 140; tooltip.style.left = left + 'px'; tooltip.style.top = top + 'px'; });
+  point.addEventListener('mouseleave', () => { tooltip.classList.remove('visible'); });
+  point.addEventListener('touchstart', (e) => { e.preventDefault(); ttDate.textContent = point.dataset.date; ttValue.textContent = point.dataset.value + ' kg'; ttLabel.textContent = point.dataset.label; tooltip.classList.add('visible'); const rect = chartContainer.getBoundingClientRect(); tooltip.style.left = (e.touches[0].clientX - rect.left + 20) + 'px'; tooltip.style.top = (e.touches[0].clientY - rect.top - 60) + 'px'; setTimeout(() => tooltip.classList.remove('visible'), 3000); });
+});
+
+const lymphViz = document.getElementById('lymphViz');
+for (let i = 0; i < 53; i++) { const node = document.createElement('div'); node.className = 'lymph-node ' + (i < 9 ? 'positive' : 'negative'); node.title = i < 9 ? `Positive #${i + 1}` : `Negative #${i - 8}`; lymphViz.appendChild(node); }
+
+let scene, camera, renderer, controls, colonGroup, markers = []; let autoRotate = false;
+const container = document.getElementById('colon3dContainer');
+const markerTooltip = document.getElementById('markerTooltip'); const ttTitle = document.getElementById('ttTitle'); const ttContent = document.getElementById('ttContent'); const ttStatus = document.getElementById('ttStatus');
+const markerData = {
+  tumor: { title: 'Primary Tumor · ก้อนมะเร็งหลัก', type: 'tumor', status: 'danger', statusText: 'Adenocarcinoma pT4', details: { 'Location': 'Hepatic Flexure', 'Size': '5.5 × 3.5 × 1.5 cm', 'Type': 'Moderately differentiated adenocarcinoma', 'Invasion': 'pT4 — Through serosa (outermost layer)', 'LVI': 'Present (lymphovascular invasion)', 'Margins': 'All 3 clear (R0 resection)' } },
+  polyp1: { title: 'Polyp #1 · ติ่งเนื้อ', type: 'polyp', status: 'warning', statusText: 'Tubular Adenoma', details: { 'Location': 'Transverse Colon', 'Size': '~1.5 cm', 'Type': 'Tubular Adenoma · High Grade Dysplasia', 'Malignancy': 'None' } },
+  polyp2: { title: 'Polyp #2 (Largest) · ติ่งเนื้อใหญ่สุด', type: 'polyp', status: 'warning', statusText: 'Tubular Adenoma', details: { 'Location': 'Transverse Colon', 'Size': '~7.0 cm (largest)', 'Type': 'Tubular Adenoma · High Grade Dysplasia', 'Malignancy': 'None', 'Note': 'Consistent with FAP pattern' } },
+  polyp3: { title: 'Polyp #3 · ติ่งเนื้อ', type: 'polyp', status: 'warning', statusText: 'Tubular Adenoma', details: { 'Location': 'Transverse Colon', 'Size': '~1.2 cm', 'Type': 'Tubular Adenoma', 'Malignancy': 'None' } },
+  polyp4: { title: 'Polyp #4 · ติ่งเนื้อ', type: 'polyp', status: 'warning', statusText: 'Tubular Adenoma', details: { 'Location': 'Transverse Colon', 'Size': '~2.0 cm', 'Type': 'Tubular Adenoma · High Grade Dysplasia', 'Malignancy': 'None' } },
+  polyp5: { title: 'Polyp #5 · ติ่งเนื้อ', type: 'polyp', status: 'warning', statusText: 'Tubular Adenoma', details: { 'Location': 'Transverse Colon', 'Size': '~1.0 cm', 'Type': 'Tubular Adenoma', 'Malignancy': 'None' } },
+  polyp6: { title: 'Polyp #6 · ติ่งเนื้อ', type: 'polyp', status: 'warning', statusText: 'Tubular Adenoma', details: { 'Location': 'Descending Colon', 'Size': '~1.5 cm', 'Type': 'Tubular Adenoma', 'Malignancy': 'None' } },
+  polyp7: { title: 'Polyp #7 · ติ่งเนื้อ', type: 'polyp', status: 'warning', statusText: 'Tubular Adenoma', details: { 'Location': 'Descending Colon', 'Size': '~1.8 cm', 'Type': 'Tubular Adenoma · High Grade Dysplasia', 'Malignancy': 'None' } },
+  polyp8: { title: 'Polyp #8 · ติ่งเนื้อ', type: 'polyp', status: 'warning', statusText: 'Tubular Adenoma', details: { 'Location': 'Sigmoid Colon', 'Size': '~1.3 cm', 'Type': 'Tubular Adenoma', 'Malignancy': 'None' } },
+  marginProximal: { title: 'Proximal Margin · ขอบตัดด้านต้น', type: 'margin', status: 'success', statusText: 'Clear (R0)', details: { 'Status': 'No carcinoma', 'Location': '19 cm from tumor', 'Result': 'Benign colonic tissue only', 'Significance': 'Complete resection achieved' } },
+  marginDistal: { title: 'Distal Margin · ขอบตัดด้านปลาย', type: 'margin', status: 'success', statusText: 'Clear (R0)', details: { 'Status': 'No carcinoma', 'Location': '44 cm from tumor', 'Result': 'Benign colonic tissue only', 'Significance': 'Complete resection achieved' } }
+};
+
+const colonCurve = new THREE.CatmullRomCurve3([
+  new THREE.Vector3(-6, -3.5, 0),
+  new THREE.Vector3(-5.5, -1.5, 0.5),
+  new THREE.Vector3(-5, 1.5, 0.3),
+  new THREE.Vector3(-4, 4.5, 0),
+  new THREE.Vector3(-2, 5.5, -0.5),
+  new THREE.Vector3(0, 5.8, -0.8),
+  new THREE.Vector3(3, 5.5, -1),
+  new THREE.Vector3(5, 4.5, -0.6),
+  new THREE.Vector3(5.5, 2, -0.2),
+  new THREE.Vector3(5, -0.5, 0.3),
+  new THREE.Vector3(4, -2.5, 0.6),
+  new THREE.Vector3(2.5, -3.5, 0.9),
+  new THREE.Vector3(1, -4, 1.1),
+  new THREE.Vector3(0, -4, 1.2)
+], false, 'catmullrom', 0.5);
+
+function init3DColon() {
+  if (typeof THREE === 'undefined') return;
+  scene = new THREE.Scene();
+  scene.background = new THREE.Color(0x1a1f3a);
+  scene.fog = new THREE.Fog(0x1a1f3a, 35, 90);
+  camera = new THREE.PerspectiveCamera(40, container.clientWidth / container.clientHeight, 0.1, 1000);
+  camera.position.set(0, 2, 22);
+  renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+  renderer.setSize(container.clientWidth, container.clientHeight);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  container.appendChild(renderer.domElement);
+  controls = new THREE.OrbitControls(camera, renderer.domElement);
+  controls.enableDamping = true;
+  controls.dampingFactor = 0.08;
+  controls.minDistance = 8;
+  controls.maxDistance = 45;
+  controls.maxPolarAngle = Math.PI * 0.85;
+  controls.target.set(0, 1, 0);
+  scene.add(new THREE.AmbientLight(0xffffff, 0.55));
+  const mainLight = new THREE.DirectionalLight(0xffffff, 0.85);
+  mainLight.position.set(10, 15, 12);
+  mainLight.castShadow = true;
+  scene.add(mainLight);
+  const fillLight = new THREE.DirectionalLight(0x667eea, 0.3);
+  fillLight.position.set(-10, 5, -10);
+  scene.add(fillLight);
+  const rimLight = new THREE.DirectionalLight(0xfbbf24, 0.2);
+  rimLight.position.set(0, -5, -10);
+  scene.add(rimLight);
+  const colonMesh = new THREE.Mesh(new THREE.TubeGeometry(colonCurve, 120, 1.2, 24, false), new THREE.MeshStandardMaterial({ color: 0xd4956a, roughness: 0.7, metalness: 0.1, emissive: 0x3a1f10, emissiveIntensity: 0.1 }));
+  colonMesh.castShadow = true;
+  colonMesh.receiveShadow = true;
+  const lumenMesh = new THREE.Mesh(new THREE.TubeGeometry(colonCurve, 120, 0.9, 24, false), new THREE.MeshStandardMaterial({ color: 0x8b4a3a, roughness: 0.9, metalness: 0.0, emissive: 0x2a1510, emissiveIntensity: 0.2 }));
+  colonGroup = new THREE.Group();
+  colonGroup.add(colonMesh);
+  colonGroup.add(lumenMesh);
+  scene.add(colonGroup);
+  for (let i = 0; i < 30; i++) {
+    const t = i / 30;
+    const point = colonCurve.getPoint(t);
+    const ring = new THREE.Mesh(new THREE.TorusGeometry(1.25, 0.08, 8, 24), new THREE.MeshStandardMaterial({ color: 0xa06040, roughness: 0.8 }));
+    ring.position.copy(point);
+    const tangent = colonCurve.getTangent(t);
+    ring.lookAt(point.clone().add(tangent));
+    colonGroup.add(ring);
+  }
+  const tumorPos = colonCurve.getPoint(0.25);
+  createMarker(tumorPos, 0.75, 0xef4444, 'tumor', true);
+  [0.35, 0.45, 0.55, 0.65, 0.72, 0.78, 0.84, 0.90].forEach((t, i) => {
+    const pos = colonCurve.getPoint(t);
+    const offset = new THREE.Vector3((Math.random() - 0.5) * 0.5, 1.3 + Math.random() * 0.3, (Math.random() - 0.5) * 0.5);
+    createMarker(pos.clone().add(offset), 0.32, 0xfbbf24, `polyp${i+1}`, false);
+  });
+  for (let i = 0; i < 9; i++) {
+    const angle = (i / 9) * Math.PI * 2;
+    const radius = 2.3 + Math.random() * 1.3;
+    const pos = tumorPos.clone().add(new THREE.Vector3(Math.cos(angle) * radius, (Math.random() - 0.5) * 2, Math.sin(angle) * radius));
+    createMarker(pos, 0.22, 0xef4444, `lymph${i+1}`, false, 0.7);
+  }
+  createMarker(colonCurve.getPoint(0.05), 0.38, 0x22c55e, 'marginProximal', false);
+  createMarker(colonCurve.getPoint(0.95), 0.38, 0x22c55e, 'marginDistal', false);
+  addLabel('HEPATIC FLEXURE', tumorPos.clone().add(new THREE.Vector3(0, 2.2, 0)));
+  addLabel('CECUM', new THREE.Vector3(-6.5, -5, 0));
+  addLabel('TRANSVERSE', new THREE.Vector3(0, 7.5, -0.8));
+  addLabel('SIGMOID', new THREE.Vector3(4.5, -5, 0.6));
+  addLabel('RECTUM', new THREE.Vector3(1, -5.5, 1.2));
+  const raycaster = new THREE.Raycaster();
+  const mouse = new THREE.Vector2();
+  renderer.domElement.addEventListener('mousemove', (event) => {
+    const rect = renderer.domElement.getBoundingClientRect();
+    mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+    mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+    raycaster.setFromCamera(mouse, camera);
+    const intersects = raycaster.intersectObjects(markers.map(m => m.mesh));
+    if (intersects.length > 0) {
+      const marker = markers.find(m => m.mesh === intersects[0].object);
+      if (marker && markerData[marker.id]) {
+        const data = markerData[marker.id];
+        ttTitle.textContent = data.title;
+        ttContent.innerHTML = Object.entries(data.details).map(([k, v]) => `<strong>${k}:</strong> ${v}`).join('<br>');
+        ttStatus.textContent = data.statusText;
+        ttStatus.className = `tt-status status-${data.status}`;
+        markerTooltip.classList.add('visible');
+        markerTooltip.style.left = (event.clientX - container.getBoundingClientRect().left + 15) + 'px';
+        markerTooltip.style.top = (event.clientY - container.getBoundingClientRect().top - 10) + 'px';
+        renderer.domElement.style.cursor = 'pointer';
+      }
+    } else {
+      markerTooltip.classList.remove('visible');
+      renderer.domElement.style.cursor = 'grab';
+    }
+  });
+  renderer.domElement.addEventListener('click', (event) => {
+    const rect = renderer.domElement.getBoundingClientRect();
+    mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+    mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+    raycaster.setFromCamera(mouse, camera);
+    const intersects = raycaster.intersectObjects(markers.map(m => m.mesh));
+    if (intersects.length > 0) {
+      const marker = markers.find(m => m.mesh === intersects[0].object);
+      if (marker && markerData[marker.id]) showDetailPanel(markerData[marker.id]);
+    }
+  });
+  renderer.domElement.addEventListener('touchend', (event) => {
+    if (event.changedTouches.length === 0) return;
+    const touch = event.changedTouches[0];
+    const rect = renderer.domElement.getBoundingClientRect();
+    mouse.x = ((touch.clientX - rect.left) / rect.width) * 2 - 1;
+    mouse.y = -((touch.clientY - rect.top) / rect.height) * 2 + 1;
+    raycaster.setFromCamera(mouse, camera);
+    const intersects = raycaster.intersectObjects(markers.map(m => m.mesh));
+    if (intersects.length > 0) {
+      const marker = markers.find(m => m.mesh === intersects[0].object);
+      if (marker && markerData[marker.id]) showDetailPanel(markerData[marker.id]);
+    }
+  });
+  window.addEventListener('resize', () => {
+    camera.aspect = container.clientWidth / container.clientHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(container.clientWidth, container.clientHeight);
+  });
+  animateColon();
+}
+
+function createMarker(position, size, color, id, isTumor = false, opacity = 1) {
+  const mesh = new THREE.Mesh(new THREE.SphereGeometry(size, 32, 32), new THREE.MeshStandardMaterial({ color: color, emissive: color, emissiveIntensity: isTumor ? 0.6 : 0.3, roughness: 0.3, metalness: 0.4, transparent: opacity < 1, opacity: opacity }));
+  mesh.position.copy(position);
+  mesh.castShadow = true;
+  if (isTumor) {
+    const ring = new THREE.Mesh(new THREE.RingGeometry(size + 0.3, size + 0.6, 32), new THREE.MeshBasicMaterial({ color: color, transparent: true, opacity: 0.5, side: THREE.DoubleSide }));
+    ring.position.copy(position);
+    ring.lookAt(camera.position);
+    colonGroup.add(ring);
+    markers.push({ mesh: ring, id: id, isRing: true });
+  }
+  colonGroup.add(mesh);
+  markers.push({ mesh, id });
+}
+
+function addLabel(text, position) {
+  const canvas = document.createElement('canvas');
+  canvas.width = 256;
+  canvas.height = 64;
+  const ctx = canvas.getContext('2d');
+  ctx.fillStyle = 'rgba(0,0,0,0.65)';
+  if (ctx.roundRect) { ctx.roundRect(0, 0, 256, 64, 12); } else { ctx.fillRect(0, 0, 256, 64); }
+  ctx.fill();
+  ctx.fillStyle = '#ffffff';
+  ctx.font = 'bold 22px Inter, sans-serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText(text, 128, 32);
+  const sprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: new THREE.CanvasTexture(canvas), transparent: true }));
+  sprite.position.copy(position);
+  sprite.scale.set(4, 1, 1);
+  colonGroup.add(sprite);
+}
+
+function animateColon() {
+  requestAnimationFrame(animateColon);
+  controls.update();
+  if (autoRotate) colonGroup.rotation.y += 0.004;
+  markers.forEach(m => {
+    if (m.id === 'tumor' && !m.isRing) {
+      const scale = 1 + Math.sin(Date.now() * 0.003) * 0.12;
+      m.mesh.scale.set(scale, scale, scale);
+    }
+    if (m.isRing) {
+      m.mesh.lookAt(camera.position);
+      const scale = 1 + Math.sin(Date.now() * 0.003) * 0.18;
+      m.mesh.scale.set(scale, scale, scale);
+    }
+  });
+  renderer.render(scene, camera);
+}
+
+function resetCamera() {
+  camera.position.set(0, 2, 22);
+  controls.target.set(0, 1, 0);
+  autoRotate = false;
+}
+
+function toggleAutoRotate() { autoRotate = !autoRotate; }
+
+function focusTumor() {
+  const tumorMarker = markers.find(m => m.id === 'tumor' && !m.isRing);
+  if (tumorMarker) {
+    const pos = tumorMarker.mesh.position;
+    controls.target.copy(pos);
+    camera.position.set(pos.x + 5, pos.y + 4, pos.z + 9);
+  }
+}
+
+// ============================================
+// 3D SURGERY DIAGRAM - STATIC, HIGH DEFINITION
+// ============================================
+let surgeryScene, surgeryCamera, surgeryRenderer;
+const surgeryContainer = document.getElementById('surgery3dContainer');
+
+function init3DSurgery() {
+  if (typeof THREE === 'undefined') return;
+  
+  surgeryScene = new THREE.Scene();
+  surgeryScene.background = new THREE.Color(0xfaf8f4);
+  
+  surgeryCamera = new THREE.PerspectiveCamera(35, surgeryContainer.clientWidth / surgeryContainer.clientHeight, 0.1, 1000);
+  surgeryCamera.position.set(14, 10, 14);
+  surgeryCamera.lookAt(0, 0, 0);
+  
+  surgeryRenderer = new THREE.WebGLRenderer({ antialias: true });
+  surgeryRenderer.setSize(surgeryContainer.clientWidth, surgeryContainer.clientHeight);
+  surgeryRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  surgeryRenderer.shadowMap.enabled = true;
+  surgeryRenderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  surgeryRenderer.toneMapping = THREE.ACESFilmicToneMapping;
+  surgeryRenderer.toneMappingExposure = 1.1;
+  surgeryContainer.appendChild(surgeryRenderer.domElement);
+  
+  const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+  surgeryScene.add(ambientLight);
+  
+  const keyLight = new THREE.DirectionalLight(0xffffff, 1.0);
+  keyLight.position.set(8, 12, 8);
+  keyLight.castShadow = true;
+  keyLight.shadow.mapSize.width = 2048;
+  keyLight.shadow.mapSize.height = 2048;
+  keyLight.shadow.camera.near = 0.5;
+  keyLight.shadow.camera.far = 50;
+  keyLight.shadow.camera.left = -15;
+  keyLight.shadow.camera.right = 15;
+  keyLight.shadow.camera.top = 15;
+  keyLight.shadow.camera.bottom = -15;
+  surgeryScene.add(keyLight);
+  
+  const fillLight = new THREE.DirectionalLight(0xfff0e0, 0.4);
+  fillLight.position.set(-8, 6, -8);
+  surgeryScene.add(fillLight);
+  
+  const rimLight = new THREE.DirectionalLight(0xffe8d0, 0.3);
+  rimLight.position.set(0, -5, -10);
+  surgeryScene.add(rimLight);
+  
+  const groundGeo = new THREE.PlaneGeometry(30, 30);
+  const groundMat = new THREE.MeshStandardMaterial({ color: 0xf5e8d8, roughness: 0.9, metalness: 0.0 });
+  const ground = new THREE.Mesh(groundGeo, groundMat);
+  ground.rotation.x = -Math.PI / 2;
+  ground.position.y = -5;
+  ground.receiveShadow = true;
+  surgeryScene.add(ground);
+  
+  const abdominalWallGeo = new THREE.PlaneGeometry(20, 4, 32, 1);
+  const abdominalWallMat = new THREE.MeshStandardMaterial({ color: 0xf0d8c0, roughness: 0.7, metalness: 0.0, transparent: true, opacity: 0.4, side: THREE.DoubleSide });
+  const abdominalWall = new THREE.Mesh(abdominalWallGeo, abdominalWallMat);
+  abdominalWall.position.set(0, 2, 6);
+  abdominalWall.rotation.x = -0.2;
+  abdominalWall.castShadow = true;
+  surgeryScene.add(abdominalWall);
+  
+  const abdominalLineGeo = new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(-10, 2, 6), new THREE.Vector3(10, 2, 6)]);
+  const abdominalLineMat = new THREE.LineBasicMaterial({ color: 0xb8963e, linewidth: 2 });
+  const abdominalLine = new THREE.Line(abdominalLineGeo, abdominalLineMat);
+  surgeryScene.add(abdominalLine);
+  
+  const ghostColonCurve = new THREE.CatmullRomCurve3([
+    new THREE.Vector3(5, -3, 2), new THREE.Vector3(5, 0, 1), new THREE.Vector3(4, 2, 0),
+    new THREE.Vector3(0, 2, -1), new THREE.Vector3(-4, 2, 0), new THREE.Vector3(-5, 0, 1), new THREE.Vector3(-5, -3, 2)
+  ], false, 'catmullrom', 0.5);
+  const ghostColonGeo = new THREE.TubeGeometry(ghostColonCurve, 64, 1.0, 16, false);
+  const ghostColonMat = new THREE.MeshStandardMaterial({ color: 0xa89f94, roughness: 0.8, transparent: true, opacity: 0.25, wireframe: true });
+  const ghostColon = new THREE.Mesh(ghostColonGeo, ghostColonMat);
+  surgeryScene.add(ghostColon);
+  
+  const smallIntestineCurve = new THREE.CatmullRomCurve3([
+    new THREE.Vector3(-4, 4, -2), new THREE.Vector3(-3, 2.5, -1), new THREE.Vector3(-2, 1, 0),
+    new THREE.Vector3(-1, -0.5, 1), new THREE.Vector3(0, -2, 2), new THREE.Vector3(1, -3, 2.5)
+  ], false, 'catmullrom', 0.5);
+  const smallIntestineGeo = new THREE.TubeGeometry(smallIntestineCurve, 80, 0.6, 16, false);
+  const smallIntestineMat = new THREE.MeshStandardMaterial({ color: 0xd4956a, roughness: 0.6, metalness: 0.1, emissive: 0x3a1f10, emissiveIntensity: 0.1 });
+  const smallIntestine = new THREE.Mesh(smallIntestineGeo, smallIntestineMat);
+  smallIntestine.castShadow = true;
+  smallIntestine.receiveShadow = true;
+  surgeryScene.add(smallIntestine);
+  
+  for (let i = 0; i < 20; i++) {
+    const t = i / 20;
+    const point = smallIntestineCurve.getPoint(t);
+    const tangent = smallIntestineCurve.getTangent(t);
+    const ringGeo = new THREE.TorusGeometry(0.65, 0.05, 8, 16);
+    const ringMat = new THREE.MeshStandardMaterial({ color: 0xa06040, roughness: 0.8 });
+    const ring = new THREE.Mesh(ringGeo, ringMat);
+    ring.position.copy(point);
+    ring.lookAt(point.clone().add(tangent));
+    ring.castShadow = true;
+    surgeryScene.add(ring);
+  }
+  
+  const jPouchCurve = new THREE.CatmullRomCurve3([
+    new THREE.Vector3(1, -3, 2.5), new THREE.Vector3(1.5, -3.5, 3), new THREE.Vector3(2, -3.8, 3.2),
+    new THREE.Vector3(1.8, -4, 3), new THREE.Vector3(1.2, -4, 2.8), new THREE.Vector3(0.8, -3.8, 3),
+    new THREE.Vector3(0.5, -4, 3.5), new THREE.Vector3(0.3, -4.2, 4)
+  ], false, 'catmullrom', 0.5);
+  const jPouchGeo = new THREE.TubeGeometry(jPouchCurve, 64, 0.7, 16, false);
+  const jPouchMat = new THREE.MeshStandardMaterial({ color: 0xb57850, roughness: 0.6, metalness: 0.1, emissive: 0x4a2010, emissiveIntensity: 0.15 });
+  const jPouch = new THREE.Mesh(jPouchGeo, jPouchMat);
+  jPouch.castShadow = true;
+  jPouch.receiveShadow = true;
+  surgeryScene.add(jPouch);
+  
+  for (let i = 0; i < 15; i++) {
+    const t = i / 15;
+    const point = jPouchCurve.getPoint(t);
+    const tangent = jPouchCurve.getTangent(t);
+    const ringGeo = new THREE.TorusGeometry(0.75, 0.06, 8, 16);
+    const ringMat = new THREE.MeshStandardMaterial({ color: 0x8b4a3a, roughness: 0.8 });
+    const ring = new THREE.Mesh(ringGeo, ringMat);
+    ring.position.copy(point);
+    ring.lookAt(point.clone().add(tangent));
+    ring.castShadow = true;
+    surgeryScene.add(ring);
+  }
+  
+  const analConnectionCurve = new THREE.CatmullRomCurve3([
+    new THREE.Vector3(0.3, -4.2, 4), new THREE.Vector3(0.2, -4.5, 4.2),
+    new THREE.Vector3(0.1, -4.8, 4.3), new THREE.Vector3(0, -5, 4.3)
+  ], false, 'catmullrom', 0.5);
+  const analConnectionGeo = new THREE.TubeGeometry(analConnectionCurve, 32, 0.35, 12, false);
+  const analConnectionMat = new THREE.MeshStandardMaterial({ color: 0x8b4a3a, roughness: 0.7, metalness: 0.1 });
+  const analConnection = new THREE.Mesh(analConnectionGeo, analConnectionMat);
+  analConnection.castShadow = true;
+  surgeryScene.add(analConnection);
+  
+  const analGeo = new THREE.SphereGeometry(0.4, 16, 16);
+  const analMat = new THREE.MeshStandardMaterial({ color: 0x7a2e3a, emissive: 0x7a2e3a, emissiveIntensity: 0.3, roughness: 0.4, metalness: 0.3 });
+  const anal = new THREE.Mesh(analGeo, analMat);
+  anal.position.set(0, -5, 4.3);
+  anal.castShadow = true;
+  surgeryScene.add(anal);
+  
+  const stomaCurve = new THREE.CatmullRomCurve3([
+    new THREE.Vector3(-1, -0.5, 1), new THREE.Vector3(-0.8, 0.5, 2),
+    new THREE.Vector3(-0.5, 1.5, 3.5), new THREE.Vector3(-0.3, 2, 5), new THREE.Vector3(-0.2, 2.2, 5.8)
+  ], false, 'catmullrom', 0.5);
+  const stomaTubeGeo = new THREE.TubeGeometry(stomaCurve, 48, 0.6, 16, false);
+  const stomaTubeMat = new THREE.MeshStandardMaterial({ color: 0xd4956a, roughness: 0.6, metalness: 0.1, emissive: 0x3a1f10, emissiveIntensity: 0.1 });
+  const stomaTube = new THREE.Mesh(stomaTubeGeo, stomaTubeMat);
+  stomaTube.castShadow = true;
+  surgeryScene.add(stomaTube);
+  
+  const stomaOpeningGeo = new THREE.CylinderGeometry(0.5, 0.45, 0.3, 24);
+  const stomaOpeningMat = new THREE.MeshStandardMaterial({ color: 0xc47a2a, emissive: 0xc47a2a, emissiveIntensity: 0.5, roughness: 0.3, metalness: 0.4 });
+  const stomaOpening = new THREE.Mesh(stomaOpeningGeo, stomaOpeningMat);
+  stomaOpening.position.set(-0.2, 2.3, 6);
+  stomaOpening.rotation.x = Math.PI / 2;
+  stomaOpening.castShadow = true;
+  surgeryScene.add(stomaOpening);
+  
+  const stomaGlowGeo = new THREE.RingGeometry(0.6, 0.9, 32);
+  const stomaGlowMat = new THREE.MeshBasicMaterial({ color: 0xc47a2a, transparent: true, opacity: 0.4, side: THREE.DoubleSide });
+  const stomaGlow = new THREE.Mesh(stomaGlowGeo, stomaGlowMat);
+  stomaGlow.position.set(-0.2, 2.35, 6.05);
+  stomaGlow.rotation.x = Math.PI / 2;
+  surgeryScene.add(stomaGlow);
+  
+  const arrowMat = new THREE.MeshStandardMaterial({ color: 0xb8963e, emissive: 0xb8963e, emissiveIntensity: 0.3, roughness: 0.4, metalness: 0.3 });
+  const arrowPositions = [
+    { pos: new THREE.Vector3(-3, 2, -1.5), dir: new THREE.Vector3(-2, 1, 0) },
+    { pos: new THREE.Vector3(-1.5, 0, 0.5), dir: new THREE.Vector3(-1, -1, 1) },
+    { pos: new THREE.Vector3(0.5, -2.5, 2.2), dir: new THREE.Vector3(0.5, -1, 0.5) },
+    { pos: new THREE.Vector3(1.5, -3.5, 3), dir: new THREE.Vector3(0.3, -0.5, 0.8) }
+  ];
+  arrowPositions.forEach(({ pos, dir }) => {
+    const arrowGeo = new THREE.ConeGeometry(0.15, 0.4, 8);
+    const arrow = new THREE.Mesh(arrowGeo, arrowMat);
+    arrow.position.copy(pos);
+    arrow.lookAt(pos.clone().add(dir));
+    arrow.castShadow = true;
+    surgeryScene.add(arrow);
+  });
+  
+  surgeryRenderer.render(surgeryScene, surgeryCamera);
+  
+  window.addEventListener('resize', () => {
+    if (surgeryRenderer && surgeryContainer) {
+      surgeryCamera.aspect = surgeryContainer.clientWidth / surgeryContainer.clientHeight;
+      surgeryCamera.updateProjectionMatrix();
+      surgeryRenderer.setSize(surgeryContainer.clientWidth, surgeryContainer.clientHeight);
+      surgeryRenderer.render(surgeryScene, surgeryCamera);
+    }
+  });
+}
+
+function showDetailPanel(data) {
+  const panel = document.getElementById('detailPanel');
+  const content = document.getElementById('detailContent');
+  let html = `<h2>${data.title}</h2><div class="detail-section"><div class="tag ${data.status}" style="display: inline-block; margin-bottom: 16px;">${data.statusText}</div></div>`;
+  Object.entries(data.details).forEach(([key, value]) => {
+    html += `<div class="detail-section"><div class="detail-label">${key}</div><div class="detail-value">${value}</div></div>`;
+  });
+  content.innerHTML = html;
+  panel.classList.add('open');
+}
+
+function closeDetailPanel() { document.getElementById('detailPanel').classList.remove('open'); }
+
+document.addEventListener('DOMContentLoaded', () => {
+  let savedLang = 'en';
+  try { savedLang = localStorage.getItem('preferred-lang') || 'en'; } catch(e) {}
+  switchLang(savedLang);
+  document.querySelectorAll('.collapsible').forEach(c => { if (!c.classList.contains('open')) c.classList.add('open'); });
+  init3DColon();
+  init3DSurgery();
+});
+
+document.addEventListener('click', (e) => {
+  const panel = document.getElementById('detailPanel');
+  if (panel.classList.contains('open') && !panel.contains(e.target) && !e.target.closest('.marker')) {
+    closeDetailPanel();
+  }
+});
+</script>
+</body>
+</html>
